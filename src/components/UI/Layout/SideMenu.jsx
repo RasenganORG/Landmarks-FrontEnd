@@ -1,5 +1,5 @@
 import 'antd/dist/antd.min.css';
-import classes from './Navbar.module.css';
+import classes from './SideMenu.module.css';
 
 import { useState } from 'react';
 import {
@@ -9,7 +9,7 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { Avatar, Layout, Menu, Col, Row } from 'antd';
-import Btn from './UI/Btn';
+// import Btn from './UI/Btn';
 
 const { Sider } = Layout;
 
@@ -33,14 +33,14 @@ const rooms = [
   ]),
 ];
 
-const buttons = [
-  getItem('Create Room', '7', <PlusSquareOutlined />),
-  getItem('Join Room', '8', <RightSquareOutlined />),
-];
+// const buttons = [
+//   getItem('Create Room', '7', <PlusSquareOutlined />),
+//   getItem('Join Room', '8', <RightSquareOutlined />),
+// ];
 
 const logoutItem = [getItem('Logout', '9', <LogoutOutlined />)];
 
-export default function Navbar() {
+export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(false);
   const [current, setCurrent] = useState('4');
 
@@ -48,6 +48,7 @@ export default function Navbar() {
     console.log(value);
     setCollapsed(value);
   };
+
   const openRoom = (e) => {
     console.log('click ', e);
     // Set current active menu item
@@ -98,11 +99,19 @@ export default function Navbar() {
       collapsible
       collapsed={collapsed}
       onCollapse={siderCollapse}
+      // style={{
+      //   overflow: 'auto',
+      //   height: '100vh',
+      //   position: 'fixed',
+      //   left: 0,
+      //   top: 0,
+      //   bottom: 0,
+      // }}
     >
       <Row gutter={[0, 16]} align='middle' justify='space-around'>
         {/* Logo Column */}
         <Col span={24} align='middle'>
-          <div className={classes.logo} />
+          {/* <div className={classes.logo} /> */}
         </Col>
         {/* Avatar Column */}
         <Col span={24} align='middle'>
