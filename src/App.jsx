@@ -2,7 +2,7 @@ import './App.css';
 import 'antd/dist/antd.min.css';
 import SideMenu from './components/UI/Layout/SideMenu';
 import DrawerUI from './components/UI/Layout/DrawerUI';
-import { LayoutContextProvider } from './context/layout-context';
+import ModalUI from './components/UI/ModalUI';
 
 import { Layout } from 'antd';
 import HeaderUI from './components/UI/Layout/HeaderUI';
@@ -16,27 +16,26 @@ const { Footer, Content } = Layout;
 
 function App() {
   return (
-    <LayoutContextProvider>
-      <Layout
-        hasSider={true}
-        style={{
-          minHeight: '100vh',
-        }}
-      >
-        <SideMenu />
-        <Layout>
-          <HeaderUI />
-          <Layout
-            id='LayoutContent'
-            style={{ position: 'relative', overflow: 'hidden' }}
-          >
-            <Content></Content>
-            <DrawerUI />
-            <Footer></Footer>
-          </Layout>
+    <Layout
+      hasSider={true}
+      style={{
+        minHeight: '100vh',
+      }}
+    >
+      <SideMenu />
+      <Layout>
+        <HeaderUI />
+        <Layout
+          id='LayoutContent'
+          style={{ position: 'relative', overflow: 'hidden' }}
+        >
+          <Content></Content>
+          <DrawerUI />
+          <Footer></Footer>
         </Layout>
       </Layout>
-    </LayoutContextProvider>
+      <ModalUI />
+    </Layout>
   );
 }
 

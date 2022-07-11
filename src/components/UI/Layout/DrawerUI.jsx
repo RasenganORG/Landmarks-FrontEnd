@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { LayoutContext } from '../../../context/layout-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { drawerActions } from '../../../store/drawer-slice';
 
 import 'antd/dist/antd.min.css';
 import { Drawer } from 'antd';
@@ -8,15 +8,21 @@ import ChatUI from '../../Chat/ChatUI';
 import Members from '../../Members/Members';
 
 export default function DrawerUI() {
-  const ctx = useContext(LayoutContext);
+  const dispatch = useDispatch();
+  const currentDrawer = useSelector((state) => state.drawer.currentDrawer);
+  const visible = useSelector((state) => state.drawer.visible);
+
+  const onDrawerCloseHandler = () => {
+    dispatch(drawerActions.closeDrawer());
+  };
 
   return (
     <Drawer
-      title={ctx.currentDrawer === '1' ? 'Chat' : 'Members'}
+      title={currentDrawer === '1' ? 'Chat' : 'Members'}
       placement={'right'}
       width={300}
-      onClose={ctx.closeDrawer}
-      visible={ctx.visibleDrawer}
+      onClose={onDrawerCloseHandler}
+      visible={visible}
       closeIcon={<RightOutlined />}
       getContainer={() => document.getElementById('LayoutContent')}
       style={{ position: 'absolute', zIndex: 90 }}
@@ -31,7 +37,7 @@ export default function DrawerUI() {
       //   </Space>
       // }
     >
-      {ctx.currentDrawer === '1' ? <ChatUI /> : <Members />}
+      {currentDrawer === '1' ? <ChatUI /> : <Members />}
     </Drawer>
   );
 }

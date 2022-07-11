@@ -1,6 +1,9 @@
 import 'antd/dist/antd.min.css';
 import classes from './SideMenu.module.css';
 
+import { modalActions } from '../../../store/modal-slice';
+import { useDispatch } from 'react-redux';
+
 import { useState } from 'react';
 import {
   WindowsOutlined,
@@ -9,7 +12,6 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { Avatar, Layout, Menu, Col, Row } from 'antd';
-// import Btn from './UI/Btn';
 
 const { Sider } = Layout;
 
@@ -33,39 +35,31 @@ const rooms = [
   ]),
 ];
 
-// const buttons = [
-//   getItem('Create Room', '7', <PlusSquareOutlined />),
-//   getItem('Join Room', '8', <RightSquareOutlined />),
-// ];
-
 const logoutItem = [getItem('Logout', '9', <LogoutOutlined />)];
 
 export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(false);
   const [current, setCurrent] = useState('4');
 
+  const dispatch = useDispatch();
+
   const siderCollapse = (value) => {
-    console.log(value);
     setCollapsed(value);
   };
 
   const openRoom = (e) => {
-    console.log('click ', e);
     // Set current active menu item
     // If either 'Create Room' or 'Join Room' was clicked then instead of setting active item
     // open appropriate modal
     if (e.key === '1') {
       // Open Create Room modal
+      dispatch(modalActions.openModal('Create'));
       setCurrent('');
       return;
     }
     if (e.key === '2') {
       // Open Join Room modal
-      setCurrent('');
-      return;
-    }
-    if (e.key === '9') {
-      // Logout
+      dispatch(modalActions.openModal('Join'));
       setCurrent('');
       return;
     }
@@ -88,81 +82,64 @@ export default function SideMenu() {
   };
 
   const logout = (e) => {
-    console.log('click ', e);
+    dispatch(modalActions.openModal('Logout'));
     setCurrent('');
     // Log out the user
   };
 
   return (
-    <Sider
-      width={300}
-      collapsible
-      collapsed={collapsed}
-      onCollapse={siderCollapse}
-      // style={{
-      //   overflow: 'auto',
-      //   height: '100vh',
-      //   position: 'fixed',
-      //   left: 0,
-      //   top: 0,
-      //   bottom: 0,
-      // }}
-    >
-      <Row gutter={[0, 16]} align='middle' justify='space-around'>
-        {/* Logo Column */}
-        <Col span={24} align='middle'>
-          {/* <div className={classes.logo} /> */}
-        </Col>
-        {/* Avatar Column */}
-        <Col span={24} align='middle'>
-          <Avatar size={60}>USER</Avatar>
-        </Col>
-        {/* Horizontal menu acting as buttons */}
-        <Col span={24}>
-          {/* <Menu
-            theme='dark'
-            mode='horizontal'
-            items={buttons}
-            style={{
-              fontSize: '16px',
-            }}
-          /> */}
-        </Col>
-        {/* Create Room Column */}
-        {/* <Col span={11} align='middle'>
-          <Btn text='Create Room' icon={true} />
-        </Col> */}
-        {/* Join Room Column */}
-        {/* <Col span={11} align='middle'>
-          <Btn text='Join Room' icon={false} />
-        </Col> */}
-        {/* Menu Column */}
-        <Col span={24}>
+    <>
+      <Sider
+        width={300}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={siderCollapse}
+        // style={{
+        //   overflow: 'auto',
+        //   height: '100vh',
+        //   position: 'fixed',
+        //   left: 0,
+        //   top: 0,
+        //   bottom: 0,
+        // }}
+      >
+        <Row gutter={[0, 16]} align='middle' justify='space-around'>
+          {/* Logo Column */}
+          <Col span={24} align='middle'>
+            {/* <div className={classes.logo} /> */}
+          </Col>
+          {/* Avatar Column */}
+          <Col span={24} align='middle'>
+            <Avatar size={60}>USER</Avatar>
+          </Col>
+          {/* Horizontal menu acting as buttons */}
+          <Col span={24}>
+            <Menu
+              theme='dark'
+              defaultOpenKeys={['3']}
+              selectedKeys={[onStartWhichRoomToOpen()]}
+              onClick={openRoom}
+              mode='inline'
+              items={rooms}
+              style={{
+                fontSize: '16px',
+              }}
+            />
+          </Col>
+        </Row>
+        <div className={classes.logout}>
           <Menu
             theme='dark'
-            defaultOpenKeys={['3']}
-            selectedKeys={[onStartWhichRoomToOpen()]}
-            onClick={openRoom}
-            mode='inline'
-            items={rooms}
+            selectedKeys={['']}
+            onClick={logout}
+            mode='vertical'
+            items={logoutItem}
             style={{
               fontSize: '16px',
             }}
           />
-        </Col>
-      </Row>
-      <div className={classes.logout}>
-        <Menu
-          theme='dark'
-          selectedKeys={['']}
-          onClick={logout}
-          mode='vertical'
-          items={logoutItem}
-          style={{
-            fontSize: '16px',
-          }}
-        />
-      </div>
-    </Sider>
+        </div>
+      </Sider>
+    </>
   );
 }

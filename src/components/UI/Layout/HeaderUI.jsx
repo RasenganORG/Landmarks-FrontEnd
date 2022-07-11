@@ -1,13 +1,14 @@
-import { LayoutContext } from '../../../context/layout-context';
+import { drawerActions } from '../../../store/drawer-slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 import 'antd/dist/antd.min.css';
 import { Layout, Menu } from 'antd';
-import { useContext } from 'react';
 
 const { Header } = Layout;
 
 export default function HeaderUI() {
-  const ctx = useContext(LayoutContext);
+  const dispatch = useDispatch();
+  const currentDrawer = useSelector((state) => state.drawer.currentDrawer);
 
   const roomItems = [
     {
@@ -22,25 +23,25 @@ export default function HeaderUI() {
 
   const handleMenuItemClick = ({ key }) => {
     console.log('key', key);
-    console.log('drawer', ctx.currentDrawer);
+    console.log('drawer', currentDrawer);
 
     if (key === '1') {
-      if (key === ctx.currentDrawer) {
-        ctx.closeDrawer();
+      if (key === currentDrawer) {
+        dispatch(drawerActions.closeDrawer());
         return;
       }
       // Open Chat Drawer
-      ctx.changeDrawer(key);
-      ctx.openDrawer();
+      dispatch(drawerActions.changeDrawer(key));
+      dispatch(drawerActions.openDrawer());
     }
     if (key === '2') {
-      if (key === ctx.currentDrawer) {
-        ctx.closeDrawer();
+      if (key === currentDrawer) {
+        dispatch(drawerActions.closeDrawer());
         return;
       }
       // Open Members Drawer
-      ctx.changeDrawer(key);
-      ctx.openDrawer();
+      dispatch(drawerActions.changeDrawer(key));
+      dispatch(drawerActions.openDrawer());
     }
   };
 
@@ -50,9 +51,12 @@ export default function HeaderUI() {
         theme='dark'
         mode='horizontal'
         defaultSelectedKeys={['1']}
-        selectedKeys={[ctx.currentDrawer]}
+        selectedKeys={[currentDrawer]}
         onClick={handleMenuItemClick}
         items={roomItems}
+        style={{
+          fontSize: '16px',
+        }}
       />
     </Header>
   );
