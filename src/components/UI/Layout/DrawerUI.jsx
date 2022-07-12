@@ -5,7 +5,7 @@ import 'antd/dist/antd.min.css';
 import { Drawer } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import ChatUI from '../../Chat/ChatUI';
-import Members from '../../Members/Members';
+import MembersList from '../../Members/MembersList';
 
 export default function DrawerUI() {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ export default function DrawerUI() {
       //   </Space>
       // }
     >
-      {currentDrawer === '1' ? <ChatUI /> : <Members />}
+      {currentDrawer === '1' ? <ChatUI /> : <MembersList />}
     </Drawer>
   );
 }

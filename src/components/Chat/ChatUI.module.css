@@ -1,0 +1,10 @@
+.message-list {
+    min-width: none;
+}
+
+.chat-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

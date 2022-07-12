@@ -2,10 +2,17 @@ Create Room Modal
 Join Room Modal
 Logout Modal
 
-Add Map
+Add Map with OpenLayers
 Add Events and Marker on Map buttons in Top Nav
 
 Finish Members and Chat components
+
+Add Event Modal on Navbar and inside Create Room
+Add Event button and Add Marker on Navbar
+->Add Event has to have full timestamp and a dropdown with already dropped/drawn markers from the map
+
+        When: Date Input
+        Where: Select Input
 
 Simulate Logged in Status
 Create Account Form
