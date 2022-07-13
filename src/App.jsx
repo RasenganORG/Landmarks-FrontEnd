@@ -3,6 +3,9 @@ import 'antd/dist/antd.min.css';
 import SideMenu from './components/UI/Layout/SideMenu';
 import DrawerUI from './components/UI/Layout/DrawerUI';
 import ModalUI from './components/UI/ModalUI';
+import CreateRoom from './components/Forms/CreateRoom';
+import JoinRoom from './components/Forms/JoinRoom';
+import Logout from './components/Forms/Logout';
 
 import { Layout } from 'antd';
 import HeaderUI from './components/UI/Layout/HeaderUI';
@@ -34,7 +37,7 @@ function App() {
           <Footer></Footer>
         </Layout>
       </Layout>
-      <ModalUI />
+      <ModalUI></ModalUI>
     </Layout>
   );
 }

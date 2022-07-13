@@ -11,14 +11,19 @@ export default function DrawerUI() {
   const dispatch = useDispatch();
   const currentDrawer = useSelector((state) => state.drawer.currentDrawer);
   const visible = useSelector((state) => state.drawer.visible);
+  const title = useSelector((state) => state.drawer.title);
 
   const onDrawerCloseHandler = () => {
     dispatch(drawerActions.closeDrawer());
   };
 
+  let whichDrawer = null;
+  if (currentDrawer === '1') whichDrawer = <ChatUI />;
+  if (currentDrawer === '2') whichDrawer = <MembersList />;
+
   return (
     <Drawer
-      title={currentDrawer === '1' ? 'Chat' : 'Members'}
+      title={title[currentDrawer - 1]}
       placement={'right'}
       width={300}
       onClose={onDrawerCloseHandler}
@@ -37,7 +42,7 @@ export default function DrawerUI() {
       //   </Space>
       // }
     >
-      {currentDrawer === '1' ? <ChatUI /> : <MembersList />}
+      {whichDrawer}
     </Drawer>
   );
 }

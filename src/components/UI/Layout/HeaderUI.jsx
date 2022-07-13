@@ -1,4 +1,5 @@
 import { drawerActions } from '../../../store/drawer-slice';
+import { modalActions } from '../../../store/modal-slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 import 'antd/dist/antd.min.css';
@@ -18,6 +19,14 @@ export default function HeaderUI() {
     {
       key: '2',
       label: 'Members',
+    },
+    {
+      key: '3',
+      label: 'Add Landmark',
+    },
+    {
+      key: '4',
+      label: 'Add Event',
     },
   ];
 
@@ -42,6 +51,14 @@ export default function HeaderUI() {
       // Open Members Drawer
       dispatch(drawerActions.changeDrawer(key));
       dispatch(drawerActions.openDrawer());
+    }
+    if (key === '3') {
+      dispatch(modalActions.openModal('Landmarks'));
+      dispatch(drawerActions.closeDrawer());
+    }
+    if (key === '4') {
+      dispatch(modalActions.openModal('Events'));
+      dispatch(drawerActions.closeDrawer());
     }
   };
 

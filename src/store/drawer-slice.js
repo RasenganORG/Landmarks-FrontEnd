@@ -5,6 +5,7 @@ const drawerSlice = createSlice({
   initialState: {
     visible: true,
     currentDrawer: '1',
+    title: ['Chat', 'Members'],
   },
   reducers: {
     openDrawer(state) {

@@ -3,11 +3,13 @@ import { modalActions } from '../../store/modal-slice';
 
 import 'antd/dist/antd.min.css';
 import { Modal } from 'antd';
-import CreateRoom from './Forms/CreateRoom';
-import JoinRoom from './Forms/JoinRoom';
-import Logout from './Forms/Logout';
+import CreateRoom from '../Forms/CreateRoom';
+import JoinRoom from '../Forms/JoinRoom';
+import Logout from '../Forms/Logout';
+import AddEvent from '../Forms/AddEvent';
+import AddLandmark from '../Forms/AddLandmark';
 
-export default function ModalUI() {
+export default function ModalUI(props) {
   const dispatch = useDispatch();
   const visible = useSelector((state) => state.modal.visible);
   const whichModal = useSelector((state) => state.modal.whichModal);
@@ -30,6 +32,14 @@ export default function ModalUI() {
     whichForm = <Logout />;
     title = 'Are you sure you want to log out ?';
   }
+  if (whichModal === 'Events') {
+    whichForm = <AddEvent />;
+    title = 'Add an event:';
+  }
+  if (whichModal === 'Landmarks') {
+    whichForm = <AddLandmark />;
+    title = 'Add a landmark:';
+  }
 
   return (
     <Modal
@@ -48,6 +58,7 @@ export default function ModalUI() {
       }}
     >
       {whichForm}
+      {/* {props.children} */}
     </Modal>
   );
 }

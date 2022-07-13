@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { modalActions } from '../../../store/modal-slice';
+import { modalActions } from '../../store/modal-slice';
 
 import 'antd/dist/antd.min.css';
 import { Button, Select, Form, Input } from 'antd';
@@ -73,7 +73,6 @@ export default function CreateRoom() {
       </Form.Item>
 
       <Form.Item
-        name='submitButtons'
         style={{
           textAlign: 'center',
           margin: '30px 0 0 0',

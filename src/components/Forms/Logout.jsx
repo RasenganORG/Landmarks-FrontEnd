@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { modalActions } from '../../../store/modal-slice';
+import { modalActions } from '../../store/modal-slice';
 
 import 'antd/dist/antd.min.css';
 import { Button, Form } from 'antd';
