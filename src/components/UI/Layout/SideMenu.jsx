@@ -38,7 +38,7 @@ const rooms = [
 const logoutItem = [getItem('Logout', '9', <LogoutOutlined />)];
 
 export default function SideMenu() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [current, setCurrent] = useState('4');
 
   const dispatch = useDispatch();

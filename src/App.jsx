@@ -3,19 +3,11 @@ import 'antd/dist/antd.min.css';
 import SideMenu from './components/UI/Layout/SideMenu';
 import DrawerUI from './components/UI/Layout/DrawerUI';
 import ModalUI from './components/UI/ModalUI';
-import CreateRoom from './components/Forms/CreateRoom';
-import JoinRoom from './components/Forms/JoinRoom';
-import Logout from './components/Forms/Logout';
+import MapUI from './components/Map/MapUI';
 
 import { Layout } from 'antd';
 import HeaderUI from './components/UI/Layout/HeaderUI';
 const { Footer, Content } = Layout;
-
-// const location = {
-//   address: 'Strada Maior Gheorghe Șonțu 8 Etaj 1, București 011448',
-//   lat: 44.46619,
-//   lng: 26.08237,
-// };
 
 function App() {
   return (
@@ -32,9 +24,11 @@ function App() {
           id='LayoutContent'
           style={{ position: 'relative', overflow: 'hidden' }}
         >
-          <Content></Content>
+          <Content>
+            <MapUI />
+          </Content>
           <DrawerUI />
-          <Footer></Footer>
+          {/* <Footer></Footer> */}
         </Layout>
       </Layout>
       <ModalUI></ModalUI>
