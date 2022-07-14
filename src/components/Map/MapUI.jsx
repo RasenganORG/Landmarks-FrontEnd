@@ -20,16 +20,23 @@ const vectorSource = new VectorSource({
 });
 
 export default function MapUI() {
-  const [map, setMap] = useState();
-  const mapElement = useRef();
   const mapRef = useRef();
-  mapRef.current = map;
+  const popup = useRef();
+  const popupContent = useRef();
 
-  // const vectorLayer = ;
+  const overlay = new Overlay({
+    element: popup.current,
+    id: 'map-popup',
+    // autoPan: {
+    //   animation: {
+    //     duration: 250,
+    //   },
+    // },
+  });
 
-  useEffect(() => {
-    const initialMap = new Map({
-      target: mapElement.current,
+  const [map] = useState(
+    new Map({
+      target: '',
       layers: [
         new TileLayer({
           source: new OSM(),
@@ -38,37 +45,42 @@ export default function MapUI() {
           source: vectorSource,
         }),
       ],
+      overlays: [overlay],
       view: new View({
         center: fromLonLat([26.08, 44.46]),
         zoom: 15,
         minZoom: 10,
         maxZoom: 20,
       }),
-    });
-    setMap(initialMap);
-  }, []);
+    })
+  );
 
   useEffect(() => {
-    map?.on('singleclick', function (evt) {
-      marker.getGeometry().setCoordinates(evt.coordinate);
+    //   setMap(initialMap);
+    map.setTarget(mapRef.current);
+    map.on('singleclick', function (evt) {
+      // marker.getGeometry().setCoordinates(evt.coordinate);
+      // console.log(overlay.element);
       console.log(evt.coordinate);
+      const coordinate = evt.coordinate;
+      const hdms = toStringHDMS(toLonLat(coordinate));
+      const content = popupContent.current;
+      // console.log('content', content);
+      content.innerHTML = '<p>You clicked here:</p><code>' + hdms + '</code>';
+      overlay.setPosition(coordinate);
     });
   }, [map]);
 
-  // map.on('singleclick', function (evt) {
-  //   const coordinate = evt.coordinate;
-  //   const hdms = toStringHDMS(toLonLat(coordinate));
-
-  //   // content.innerHTML = '<p>You clicked here:</p><code>' + hdms + '</code>';
-  //   console.log(`You clicked here: ${hdms}`);
-  //   overlay.setPosition(coordinate);
-  // });
-
   return (
-    <div
-      style={{ height: '100%', width: '100%' }}
-      ref={mapElement}
-      className='map-container'
-    />
+    <>
+      <div
+        style={{ height: '100%', width: '100%' }}
+        ref={mapRef}
+        className='map-container'
+      />
+      <div id='map-popup' ref={popup}>
+        <div id='map-popup-content' ref={popupContent}></div>
+      </div>
+    </>
   );
 }
