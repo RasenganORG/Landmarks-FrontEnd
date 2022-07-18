@@ -38,7 +38,7 @@ export default function CreateRoom() {
           },
         ]}
       >
-        <Input />
+        <Input data-cy='room-name-input' />
       </Form.Item>
       <Form.Item
         name='password'

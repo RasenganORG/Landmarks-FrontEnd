@@ -88,58 +88,56 @@ export default function SideMenu() {
   };
 
   return (
-    <>
-      <Sider
-        width={300}
-        collapsible
-        collapsed={collapsed}
-        onCollapse={siderCollapse}
-        // style={{
-        //   overflow: 'auto',
-        //   height: '100vh',
-        //   position: 'fixed',
-        //   left: 0,
-        //   top: 0,
-        //   bottom: 0,
-        // }}
-      >
-        <Row gutter={[0, 16]} align='middle' justify='space-around'>
-          {/* Logo Column */}
-          <Col span={24} align='middle'>
-            {/* <div className={classes.logo} /> */}
-          </Col>
-          {/* Avatar Column */}
-          <Col span={24} align='middle'>
-            <Avatar size={60}>USER</Avatar>
-          </Col>
-          {/* Horizontal menu acting as buttons */}
-          <Col span={24}>
-            <Menu
-              theme='dark'
-              defaultOpenKeys={['3']}
-              selectedKeys={[onStartWhichRoomToOpen()]}
-              onClick={openRoom}
-              mode='inline'
-              items={rooms}
-              style={{
-                fontSize: '16px',
-              }}
-            />
-          </Col>
-        </Row>
-        <div className={classes.logout}>
+    <Sider
+      width={300}
+      collapsible
+      collapsed={collapsed}
+      onCollapse={siderCollapse}
+      // style={{
+      //   overflow: 'auto',
+      //   height: '100vh',
+      //   position: 'fixed',
+      //   left: 0,
+      //   top: 0,
+      //   bottom: 0,
+      // }}
+    >
+      <Row gutter={[0, 16]} align='middle' justify='space-around'>
+        {/* Logo Column */}
+        <Col span={24} align='middle'>
+          {/* <div className={classes.logo} /> */}
+        </Col>
+        {/* Avatar Column */}
+        <Col span={24} align='middle'>
+          <Avatar size={60}>USER</Avatar>
+        </Col>
+        {/* Horizontal menu acting as buttons */}
+        <Col span={24}>
           <Menu
             theme='dark'
-            selectedKeys={['']}
-            onClick={logout}
-            mode='vertical'
-            items={logoutItem}
+            defaultOpenKeys={['3']}
+            selectedKeys={[onStartWhichRoomToOpen()]}
+            onClick={openRoom}
+            mode='inline'
+            items={rooms}
             style={{
               fontSize: '16px',
             }}
           />
-        </div>
-      </Sider>
-    </>
+        </Col>
+      </Row>
+      <div className={classes.logout}>
+        <Menu
+          theme='dark'
+          selectedKeys={['']}
+          onClick={logout}
+          mode='vertical'
+          items={logoutItem}
+          style={{
+            fontSize: '16px',
+          }}
+        />
+      </div>
+    </Sider>
   );
 }

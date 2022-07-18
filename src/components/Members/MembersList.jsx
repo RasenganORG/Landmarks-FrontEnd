@@ -8,7 +8,6 @@ import { membersListActions } from '../../store/membersList-slice';
 export default function Members() {
   const dispatch = useDispatch();
   const members = useSelector((state) => state.membersList.members);
-  const count = useSelector((state) => state.membersList.count);
   const howManyToLoad = useSelector((state) => state.membersList.howManyToLoad);
   const initialLoading = useSelector(
     (state) => state.membersList.initialLoading
@@ -20,12 +19,12 @@ export default function Members() {
 
   useEffect(() => {
     if (members.length === 0) dispatch(fetchMembers());
-  }, [dispatch, members]);
+  }, [dispatch]);
 
   useEffect(() => {
     setList(members);
     setData(members);
-  }, [count, members]);
+  }, [members]);
 
   const onLoadMore = () => {
     dispatch(membersListActions.changeLoading(true));

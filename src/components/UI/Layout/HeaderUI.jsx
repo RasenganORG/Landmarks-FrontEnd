@@ -67,7 +67,7 @@ export default function HeaderUI() {
       <Menu
         theme='dark'
         mode='horizontal'
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={[currentDrawer]}
         selectedKeys={[currentDrawer]}
         onClick={handleMenuItemClick}
         items={roomItems}

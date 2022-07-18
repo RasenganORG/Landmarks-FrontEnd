@@ -12,7 +12,8 @@ const membersListSlice = createSlice({
   reducers: {
     addMember(state, action) {
       const newMembers = action.payload.results;
-      console.log(newMembers);
+      // const newMembers = action.payload;
+      // console.log(newMembers);
       state.members.push(...newMembers);
       state.count += state.howManyToLoad;
     },

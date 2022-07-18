@@ -17,6 +17,8 @@ export default function DrawerUI() {
     dispatch(drawerActions.closeDrawer());
   };
 
+  console.log('Drawer gets rendered');
+
   let whichDrawer = null;
   if (currentDrawer === '1') whichDrawer = <ChatUI />;
   if (currentDrawer === '2') whichDrawer = <MembersList />;

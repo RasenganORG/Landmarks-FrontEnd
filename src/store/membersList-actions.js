@@ -4,6 +4,7 @@ export const fetchMembers = () => {
   return async (dispatch) => {
     const count = 3;
     const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+    // const fakeDataUrl = `http://localhost:8080/api/users`;
 
     try {
       const response = await fetch(fakeDataUrl);
@@ -12,7 +13,7 @@ export const fetchMembers = () => {
         throw new Error('Could not get cart data !');
       }
       const data = await response.json();
-      //   console.log(data);
+      console.log(data);
       dispatch(membersListActions.addMember(data));
 
       dispatch(membersListActions.changeInitialLoading(false));
