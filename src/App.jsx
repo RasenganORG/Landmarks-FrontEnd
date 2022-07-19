@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/pages/Login';
 import Dashboard from './components/pages/Dashboard';

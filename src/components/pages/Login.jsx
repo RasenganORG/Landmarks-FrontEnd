@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { loginActions } from '../../store/login-slice';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/auth-slice';
 import './Login.css';
 
 import 'antd/dist/antd.min.css';
@@ -14,7 +14,7 @@ export default function Login() {
 
   const onFinish = (values) => {
     console.log('Login form ', values);
-    dispatch(loginActions.login());
+    dispatch(authActions.login());
     if (location.state?.from) navigate(location.state.from);
   };
 
@@ -30,7 +30,7 @@ export default function Login() {
           onFinish={onFinish}
         >
           <Form.Item
-            name='username'
+            name={['user', 'name']}
             rules={[
               {
                 required: true,
@@ -44,7 +44,7 @@ export default function Login() {
             />
           </Form.Item>
           <Form.Item
-            name='password'
+            name={['user', 'password']}
             rules={[
               {
                 required: true,
@@ -63,9 +63,9 @@ export default function Login() {
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
-            <a className='login-form-forgot' href=''>
+            {/* <a className='login-form-forgot' href=''>
               Forgot password
-            </a>
+            </a> */}
           </Form.Item>
 
           <Form.Item>

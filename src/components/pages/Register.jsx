@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { loginActions } from '../../store/login-slice';
+import { authActions } from '../../store/auth-slice';
 
 import 'antd/dist/antd.min.css';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
@@ -22,9 +22,9 @@ export default function Register() {
     console.log('Login form ', values);
     console.log(typeof values);
 
-    setFormData(values);
+    // setFormData(values);
 
-    dispatch(loginActions.login());
+    dispatch(authActions.login());
     navigate('/');
   };
 
@@ -40,7 +40,7 @@ export default function Register() {
           onFinish={onFinish}
         >
           <Form.Item
-            name='name'
+            name={['user', 'name']}
             rules={[
               {
                 required: true,
@@ -54,7 +54,7 @@ export default function Register() {
             />
           </Form.Item>
           <Form.Item
-            name='email'
+            name={['user', 'email']}
             rules={[
               {
                 required: true,
@@ -69,7 +69,7 @@ export default function Register() {
             />
           </Form.Item>
           <Form.Item
-            name='password'
+            name={['user', 'password']}
             rules={[
               {
                 required: true,

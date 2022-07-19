@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal-slice';
-import { loginActions } from '../../store/login-slice';
+import { authActions } from '../../store/auth-slice';
 
 import 'antd/dist/antd.min.css';
 import { Button, Form } from 'antd';
@@ -12,7 +12,7 @@ export default function Logout() {
   };
 
   const onLogout = () => {
-    dispatch(loginActions.logout());
+    dispatch(authActions.logout());
   };
 
   return (
