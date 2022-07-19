@@ -1,6 +1,6 @@
 import { membersListActions } from './membersList-slice';
 
-export const fetchMembers = () => {
+export const fetchMembers = (ceva) => {
   return async (dispatch) => {
     const count = 3;
     const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
