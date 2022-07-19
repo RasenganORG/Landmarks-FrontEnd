@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal-slice';
+import { loginActions } from '../../store/login-slice';
 
 import 'antd/dist/antd.min.css';
 import { Button, Form } from 'antd';
@@ -10,8 +11,12 @@ export default function Logout() {
     dispatch(modalActions.closeModal());
   };
 
+  const onLogout = () => {
+    dispatch(loginActions.logout());
+  };
+
   return (
-    <Form name='logout'>
+    <Form name='logout' onFinish={onLogout}>
       <Form.Item
         style={{
           textAlign: 'center',
@@ -21,7 +26,7 @@ export default function Logout() {
         <Button
           style={{ marginRight: '10px' }}
           type='primary'
-          htmlType='button'
+          htmlType='submit'
         >
           Yes
         </Button>

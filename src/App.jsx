@@ -1,38 +1,25 @@
-import './App.css';
-import 'antd/dist/antd.min.css';
-import SideMenu from './components/UI/Layout/SideMenu';
-import DrawerUI from './components/UI/Layout/DrawerUI';
-import ModalUI from './components/UI/ModalUI';
-import MapUI from './components/Map/MapUI';
-
-import { Layout } from 'antd';
-import HeaderUI from './components/UI/Layout/HeaderUI';
-const { Footer, Content } = Layout;
+import { useSelector } from 'react-redux';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/pages/Login';
+import Dashboard from './components/pages/Dashboard';
+import Register from './components/pages/Register';
+import PrivateRoute from './components/pages/PrivateRoute';
 
 function App() {
+  // const isAuth = useSelector((state) => state.login.isAuthenticated);
+
   return (
-    <Layout
-      hasSider={true}
-      style={{
-        minHeight: '100vh',
-      }}
-    >
-      <SideMenu />
-      <Layout>
-        <HeaderUI />
-        <Layout
-          id='LayoutContent'
-          style={{ position: 'relative', overflow: 'hidden' }}
-        >
-          <Content>
-            <MapUI />
-          </Content>
-          <DrawerUI />
-          {/* <Footer></Footer> */}
-        </Layout>
-      </Layout>
-      <ModalUI></ModalUI>
-    </Layout>
+    <>
+      <Router>
+        <Routes>
+          <Route element={<PrivateRoute />}>
+            <Route path='/' element={<Dashboard />} />
+          </Route>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
