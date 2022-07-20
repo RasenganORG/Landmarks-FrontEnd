@@ -24,6 +24,20 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('getByTestId', (testID) => {
-  cy.get(`[data-cy=${testID}]`);
+Cypress.Commands.add('login', (username, password) => {
+  cy.get('[data-cy=login-username-input]')
+    .should('have.attr', 'placeholder', 'Username')
+    .type(`${username}`);
+  cy.get('[data-cy=login-password-input]')
+    .should('have.attr', 'placeholder', 'Password')
+    .type(`${password}`);
+  cy.contains('button', 'Log in').click();
+});
+
+Cypress.Commands.add('membersFetch', () => {
+  cy.intercept({
+    method: 'GET',
+    url: 'https://randomuser.me/api/?results=3&inc=name,gender,email,nat,picture&noinfo',
+  }).as('initialMembersList');
+  cy.wait('@initialMembersList').its('response.statusCode').should('eq', 200);
 });

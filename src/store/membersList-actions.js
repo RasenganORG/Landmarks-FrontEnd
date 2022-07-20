@@ -2,8 +2,7 @@ import { membersListActions } from './membersList-slice';
 
 export const fetchMembers = (ceva) => {
   return async (dispatch) => {
-    const count = 3;
-    const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+    const fakeDataUrl = `https://randomuser.me/api/?results=3&inc=name,gender,email,nat,picture&noinfo`;
     // const fakeDataUrl = `http://localhost:8080/api/users`;
 
     try {

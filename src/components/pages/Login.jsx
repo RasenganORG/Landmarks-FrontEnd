@@ -66,6 +66,7 @@ export default function Login() {
             <Input
               prefix={<UserOutlined className='site-form-item-icon' />}
               placeholder='Username'
+              data-cy='login-username-input'
             />
           </Form.Item>
           <Form.Item
@@ -81,6 +82,7 @@ export default function Login() {
               prefix={<LockOutlined className='site-form-item-icon' />}
               type='password'
               placeholder='Password'
+              data-cy='login-password-input'
             />
           </Form.Item>
           <Form.Item>

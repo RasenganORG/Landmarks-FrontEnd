@@ -53,7 +53,9 @@ export default function Members() {
           lineHeight: '32px',
         }}
       >
-        <Button onClick={onLoadMore}>loading more</Button>
+        <Button htmlType='button' onClick={onLoadMore}>
+          Load More
+        </Button>
       </div>
     ) : null;
 
@@ -70,13 +72,14 @@ export default function Members() {
       </Row>
       <br />
       <List
+        data-cy='members-ul'
         className='demo-loadmore-list'
         loading={initialLoading}
         itemLayout='horizontal'
         loadMore={loadMore}
         dataSource={list}
         renderItem={(item) => (
-          <List.Item>
+          <List.Item data-cy='members-li'>
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
                 avatar={<Avatar src={item.picture.large} />}

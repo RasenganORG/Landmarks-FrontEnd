@@ -70,6 +70,7 @@ export default function Register() {
             <Input
               prefix={<UserOutlined className='site-form-item-icon' />}
               placeholder='Username'
+              data-cy='register-username-input'
             />
           </Form.Item>
           <Form.Item
@@ -85,6 +86,7 @@ export default function Register() {
             <Input
               prefix={<MailOutlined className='site-form-item-icon' />}
               placeholder='E-Mail'
+              data-cy='register-email-input'
             />
           </Form.Item>
           <Form.Item
@@ -100,6 +102,7 @@ export default function Register() {
               prefix={<LockOutlined className='site-form-item-icon' />}
               type='password'
               placeholder='Password'
+              data-cy='register-password-input'
             />
           </Form.Item>
 
