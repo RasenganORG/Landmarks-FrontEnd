@@ -1,22 +1,47 @@
-import { useDispatch } from 'react-redux';
-import { authActions } from '../../store/auth-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions, login } from '../../store/auth-slice';
 import './Login.css';
 
 import 'antd/dist/antd.min.css';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Row, Col } from 'antd';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { LockOutlined, UserOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Row, Col, Spin } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const { user, isLoading, isSuccess, isError, message } = useSelector(
+    (state) => state.auth
+  );
 
   const onFinish = (values) => {
-    console.log('Login form ', values);
-    dispatch(authActions.login());
-    if (location.state?.from) navigate(location.state.from);
+    const userData = { ...values.user };
+    console.log('Logged in userData', userData);
+    dispatch(login(userData));
   };
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+    if (isSuccess || user) {
+      navigate('/');
+    }
+    dispatch(authActions.reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  if (isLoading) return <Spin indicator={antIcon} />;
 
   return (
     <Row align='middle' style={{ height: '100vh' }}>

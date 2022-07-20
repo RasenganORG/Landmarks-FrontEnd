@@ -1,18 +1,24 @@
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal-slice';
-import { authActions } from '../../store/auth-slice';
+import { logout, authActions } from '../../store/auth-slice';
 
 import 'antd/dist/antd.min.css';
 import { Button, Form } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export default function Logout() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const closeModalHandler = () => {
     dispatch(modalActions.closeModal());
   };
 
   const onLogout = () => {
-    dispatch(authActions.logout());
+    dispatch(logout());
+    dispatch(authActions.reset());
+    dispatch(modalActions.closeModal());
+    navigate('/');
   };
 
   return (

@@ -1,32 +1,51 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { authActions } from '../../store/auth-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions, register } from '../../store/auth-slice';
 
 import 'antd/dist/antd.min.css';
-import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Row, Col } from 'antd';
+import {
+  LockOutlined,
+  UserOutlined,
+  MailOutlined,
+  LoadingOutlined,
+} from '@ant-design/icons';
+import { Button, Form, Input, Row, Col, Spin } from 'antd';
+
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
 
-  const { name, email, password } = formData;
+  const { user, isLoading, isSuccess, isError, message } = useSelector(
+    (state) => state.auth
+  );
 
   const onFinish = (values) => {
-    console.log('Login form ', values);
-    console.log(typeof values);
-
-    // setFormData(values);
-
-    dispatch(authActions.login());
-    navigate('/');
+    const userData = { ...values.user };
+    console.log('Registered userData', userData);
+    dispatch(register(userData));
   };
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+    if (isSuccess || user) {
+      navigate('/');
+    }
+    dispatch(authActions.reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  if (isLoading) return <Spin indicator={antIcon} />;
 
   return (
     <Row align='middle' style={{ height: '100vh' }}>

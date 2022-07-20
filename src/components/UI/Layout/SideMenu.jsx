@@ -39,7 +39,7 @@ const logoutItem = [getItem('Logout', '9', <LogoutOutlined />)];
 
 export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(true);
-  const [current, setCurrent] = useState('4');
+  const [current, setCurrent] = useState('');
 
   const dispatch = useDispatch();
 
@@ -115,7 +115,7 @@ export default function SideMenu() {
         <Col span={24}>
           <Menu
             theme='dark'
-            defaultOpenKeys={['3']}
+            defaultOpenKeys={['']}
             selectedKeys={[onStartWhichRoomToOpen()]}
             onClick={openRoom}
             mode='inline'
