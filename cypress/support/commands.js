@@ -34,10 +34,27 @@ Cypress.Commands.add('login', (username, password) => {
   cy.contains('button', 'Log in').click();
 });
 
+Cypress.Commands.add('register', (username, email, password) => {
+  cy.get('[data-cy=register-username-input]')
+    .should('have.attr', 'placeholder', 'Username')
+    .type(`${username}`);
+  cy.get('[data-cy=register-email-input]')
+    .should('have.attr', 'placeholder', 'E-Mail')
+    .type(`${email}`);
+  cy.get('[data-cy=register-password-input]')
+    .should('have.attr', 'placeholder', 'Password')
+    .type(`${password}`);
+  cy.contains('button', 'Register').click();
+});
+
 Cypress.Commands.add('membersFetch', () => {
   cy.intercept({
     method: 'GET',
     url: 'https://randomuser.me/api/?results=3&inc=name,gender,email,nat,picture&noinfo',
   }).as('initialMembersList');
   cy.wait('@initialMembersList').its('response.statusCode').should('eq', 200);
+});
+
+Cypress.Commands.add('deleteAllUsers', () => {
+  cy.request('DELETE', 'http://localhost:8080/api/users');
 });
