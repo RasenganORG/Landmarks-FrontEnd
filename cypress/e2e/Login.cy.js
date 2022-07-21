@@ -6,7 +6,7 @@ describe('Login user', () => {
   });
 
   it('should log an existent user in', () => {
-    const user = 'George';
+    const user = 'Florian';
     cy.intercept({
       method: 'GET',
       url: `http://localhost:8080/api/user/${user}`,
@@ -16,7 +16,7 @@ describe('Login user', () => {
   });
 
   it('should throw error when trying to log in nonexistent user', () => {
-    const user = 'Florian';
+    const user = 'George';
     cy.intercept({
       method: 'GET',
       url: `http://localhost:8080/api/user/${user}`,

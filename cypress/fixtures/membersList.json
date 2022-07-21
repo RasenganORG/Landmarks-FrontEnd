@@ -1,0 +1,49 @@
+{
+    "results": [
+        {
+            "gender": "male",
+            "name": {
+                "title": "Mr",
+                "first": "Anthony",
+                "last": "Nguyen"
+            },
+            "email": "anthony.nguyen@example.com",
+            "picture": {
+                "large": "https://randomuser.me/api/portraits/men/41.jpg",
+                "medium": "https://randomuser.me/api/portraits/med/men/41.jpg",
+                "thumbnail": "https://randomuser.me/api/portraits/thumb/men/41.jpg"
+            },
+            "nat": "FR"
+        },
+        {
+            "gender": "male",
+            "name": {
+                "title": "Mr",
+                "first": "Martin",
+                "last": "Dupont"
+            },
+            "email": "martin.dupont@example.com",
+            "picture": {
+                "large": "https://randomuser.me/api/portraits/men/88.jpg",
+                "medium": "https://randomuser.me/api/portraits/med/men/88.jpg",
+                "thumbnail": "https://randomuser.me/api/portraits/thumb/men/88.jpg"
+            },
+            "nat": "FR"
+        },
+        {
+            "gender": "male",
+            "name": {
+                "title": "Mr",
+                "first": "Aiden",
+                "last": "Woods"
+            },
+            "email": "aiden.woods@example.com",
+            "picture": {
+                "large": "https://randomuser.me/api/portraits/men/96.jpg",
+                "medium": "https://randomuser.me/api/portraits/med/men/96.jpg",
+                "thumbnail": "https://randomuser.me/api/portraits/thumb/men/96.jpg"
+            },
+            "nat": "US"
+        }
+    ]
+}
