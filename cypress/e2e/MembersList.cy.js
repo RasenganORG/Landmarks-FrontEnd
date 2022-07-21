@@ -36,6 +36,7 @@ describe('Members List drawer', () => {
   });
 
   it('should intercept get (members list) request and display mock member list', () => {
+    // change response body using fixture json
     cy.intercept(
       'GET',
       'https://randomuser.me/api/?results=3&inc=name,gender,email,nat,picture&noinfo',
@@ -71,6 +72,7 @@ describe('Members List drawer', () => {
       ],
     };
 
+    // change response body using stub sample
     cy.intercept(
       'GET',
       'https://randomuser.me/api/?results=3&inc=name,gender,email,nat,picture&noinfo',

@@ -11,6 +11,7 @@ describe('Login user', () => {
       method: 'GET',
       url: `http://localhost:8080/api/user/${user}`,
     }).as('logInUser');
+
     cy.login(user, '123456789');
     cy.wait('@logInUser').its('response.statusCode').should('eq', 200);
   });

@@ -31,7 +31,7 @@ export default function Register() {
 
   const onFinish = (values) => {
     const userData = { ...values.user };
-    console.log('Registered userData', userData);
+    console.log('Registered form userData', userData);
     dispatch(register(userData));
   };
 
