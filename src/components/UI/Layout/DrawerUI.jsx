@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { drawerActions } from '../../../store/drawer-slice';
 
-import 'antd/dist/antd.min.css';
 import { Drawer } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import ChatUI from '../../Chat/ChatUI';

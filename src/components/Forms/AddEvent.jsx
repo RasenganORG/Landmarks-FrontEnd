@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../../store/modal-slice';
 
-import 'antd/dist/antd.min.css';
 import { Button, Select, Form, Input, DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 

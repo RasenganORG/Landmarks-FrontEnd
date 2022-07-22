@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { modalActions } from '../../store/modal-slice';
 
-import 'antd/dist/antd.min.css';
 import { Modal } from 'antd';
 import CreateRoom from '../Forms/CreateRoom';
 import JoinRoom from '../Forms/JoinRoom';

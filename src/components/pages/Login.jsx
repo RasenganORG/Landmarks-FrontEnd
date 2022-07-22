@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authActions, login } from '../../store/auth-slice';
 import './Login.css';
 
-import 'antd/dist/antd.min.css';
 import { LockOutlined, UserOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Row, Col, Spin } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';

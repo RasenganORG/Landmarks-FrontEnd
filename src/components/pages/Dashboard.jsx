@@ -4,7 +4,6 @@ import MapUI from '../Map/MapUI';
 import HeaderUI from '../UI/Layout/HeaderUI';
 import SideMenu from '../UI/Layout/SideMenu';
 
-import 'antd/dist/antd.min.css';
 import { Layout } from 'antd';
 const { Footer, Content } = Layout;
 

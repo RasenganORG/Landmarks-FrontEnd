@@ -1,4 +1,3 @@
-import 'antd/dist/antd.min.css';
 import classes from './SideMenu.module.css';
 
 import { modalActions } from '../../../store/modal-slice';

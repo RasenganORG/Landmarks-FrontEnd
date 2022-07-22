@@ -2,7 +2,6 @@ import { drawerActions } from '../../../store/drawer-slice';
 import { modalActions } from '../../../store/modal-slice';
 import { useDispatch, useSelector } from 'react-redux';
 
-import 'antd/dist/antd.min.css';
 import { Layout, Menu } from 'antd';
 
 const { Header } = Layout;

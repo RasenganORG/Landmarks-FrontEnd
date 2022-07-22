@@ -1,3 +1,4 @@
+Completed:
 Create Room Modal
 Join Room Modal
 Logout Modal
@@ -7,6 +8,10 @@ Add Events and Marker on Map buttons in Top Nav
 
 Finish Members and Chat components
 
+Simulate Logged in Status
+Create Account Form
+
+ToDo:
 Add Event Modal on Navbar and inside Create Room
 Add Event button and Add Marker on Navbar
 ->Add Event has to have full timestamp and a dropdown with already dropped/drawn markers from the map
@@ -14,7 +19,4 @@ Add Event button and Add Marker on Navbar
         When: Date Input
         Where: Select Input
 
-Simulate Logged in Status
-Create Account Form
-
-Deadline: 21 July
+Make it so that we can change the ant design theme easy

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, register } from '../../store/auth-slice';
 
-import 'antd/dist/antd.min.css';
 import {
   LockOutlined,
   UserOutlined,

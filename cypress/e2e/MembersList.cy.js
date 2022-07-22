@@ -3,7 +3,7 @@
 describe('Members List drawer', () => {
   beforeEach(() => {
     cy.visit('/');
-    const user = { name: 'Florian', password: '123456789' };
+    const user = { name: 'George', password: '123456789' };
     cy.login(user.name, user.password);
   });
 
@@ -24,6 +24,7 @@ describe('Members List drawer', () => {
       .find('ul > li')
       .its('length')
       .should('eq', 3);
+    cy.wait(500);
   });
 
   it('shoud load more members', () => {
@@ -33,6 +34,7 @@ describe('Members List drawer', () => {
     cy.membersFetch();
 
     cy.get('[data-cy="members-ul"]').find('ul > li').should('have.length', 6);
+    cy.wait(500);
   });
 
   it('should intercept get (members list) request and display mock member list', () => {
@@ -49,6 +51,7 @@ describe('Members List drawer', () => {
       .and('contain', 'Nguyen')
       .and('contain', 'Dupont')
       .and('contain', 'Woods');
+    cy.wait(500);
   });
 
   it('should get only 1 member from stub sample', () => {

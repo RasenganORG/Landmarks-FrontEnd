@@ -1,7 +1,6 @@
 import { createRef } from 'react';
 import classes from './ChatUI.module.css';
 
-import 'antd/dist/antd.min.css';
 import { Col, Row } from 'antd';
 
 import 'react-chat-elements/dist/main.css';
