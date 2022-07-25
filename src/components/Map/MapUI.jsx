@@ -1,5 +1,8 @@
-import 'ol/ol.css';
 import { useState, useEffect, useRef } from 'react';
+// import ModalUI from '../UI/ModalUI';
+import classes from './MapUI.module.css';
+
+import 'ol/ol.css';
 import { Map, View, Overlay, Feature } from 'ol';
 import Point from 'ol/geom/Point';
 import { Vector as VectorLayer } from 'ol/layer';
@@ -9,7 +12,7 @@ import { toStringHDMS } from 'ol/coordinate';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 
-// import ModalUI from '../UI/ModalUI';
+import { Popover } from 'antd';
 
 const marker = new Feature({
   geometry: new Point([[]]),
@@ -23,16 +26,7 @@ export default function MapUI() {
   const mapRef = useRef();
   const popup = useRef();
   const popupContent = useRef();
-
-  const overlay = new Overlay({
-    element: popup.current,
-    id: 'map-popup',
-    // autoPan: {
-    //   animation: {
-    //     duration: 250,
-    //   },
-    // },
-  });
+  const [popupText, setPopupText] = useState('');
 
   const [map] = useState(
     new Map({
@@ -45,7 +39,6 @@ export default function MapUI() {
           source: vectorSource,
         }),
       ],
-      overlays: [overlay],
       view: new View({
         center: fromLonLat([26.08, 44.46]),
         zoom: 15,
@@ -56,16 +49,23 @@ export default function MapUI() {
   );
 
   useEffect(() => {
-    //   setMap(initialMap);
+    const overlay = new Overlay({
+      element: popup.current,
+      id: 'map-popup',
+      autoPan: {
+        animation: {
+          duration: 250,
+        },
+      },
+    });
+    map.addOverlay(overlay);
     map.setTarget(mapRef.current);
     map.on('singleclick', function (evt) {
-      // marker.getGeometry().setCoordinates(evt.coordinate);
-      // console.log(overlay.element);
+      marker.getGeometry().setCoordinates(evt.coordinate);
       console.log(evt.coordinate);
       const coordinate = evt.coordinate;
       const hdms = toStringHDMS(toLonLat(coordinate));
       const content = popupContent.current;
-      // console.log('content', content);
       content.innerHTML = '<p>You clicked here:</p><code>' + hdms + '</code>';
       overlay.setPosition(coordinate);
     });
@@ -78,7 +78,8 @@ export default function MapUI() {
         ref={mapRef}
         className='map-container'
       />
-      <div id='map-popup' ref={popup}>
+      <div id='map-popup' className={classes.popup} ref={popup}>
+        <Popover placement='top' trigger='click' />
         <div id='map-popup-content' ref={popupContent}></div>
       </div>
     </>

@@ -9,7 +9,7 @@ export const fetchMembers = (ceva) => {
       const response = await fetch(fakeDataUrl);
 
       if (!response.ok) {
-        throw new Error('Could not get cart data !');
+        throw new Error('Could not get members list !');
       }
       const data = await response.json();
       console.log(data);
