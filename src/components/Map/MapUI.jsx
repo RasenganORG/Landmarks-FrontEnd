@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 // import ModalUI from '../UI/ModalUI';
 import classes from './MapUI.module.css';
+import { drawerActions } from '../../store/drawer-slice';
 
 import 'ol/ol.css';
 import { Map, View, Overlay, Feature } from 'ol';
@@ -13,6 +14,7 @@ import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 
 import PopUp from './PopUp';
+import { useDispatch } from 'react-redux';
 
 const marker = new Feature({
   geometry: new Point([[]]),
@@ -23,6 +25,7 @@ const vectorSource = new VectorSource({
 });
 
 export default function MapUI() {
+  const dispatch = useDispatch();
   const mapRef = useRef();
   const popup = useRef();
   const [coordinates, setCoordinates] = useState('');
@@ -66,13 +69,14 @@ export default function MapUI() {
     map.addOverlay(overlay);
     map.setTarget(mapRef.current);
     map.on('singleclick', function (evt) {
+      dispatch(drawerActions.closeDrawer());
       marker.getGeometry().setCoordinates(evt.coordinate);
       // console.log(evt.coordinate);
 
       setCoordinates(toStringHDMS(toLonLat(evt.coordinate)));
       overlay.setPosition(evt.coordinate);
     });
-  }, [map]);
+  }, [map, dispatch]);
 
   return (
     <>
