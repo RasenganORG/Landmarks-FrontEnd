@@ -12,7 +12,7 @@ import { toStringHDMS } from 'ol/coordinate';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 
-import { Popover } from 'antd';
+import PopUp from './PopUp';
 
 const marker = new Feature({
   geometry: new Point([[]]),
@@ -25,8 +25,11 @@ const vectorSource = new VectorSource({
 export default function MapUI() {
   const mapRef = useRef();
   const popup = useRef();
-  const popupContent = useRef();
-  const [popupText, setPopupText] = useState('');
+  const [coordinates, setCoordinates] = useState('');
+
+  const closePopup = () => {
+    map.getOverlayById('map-popup').setPosition(undefined);
+  };
 
   const [map] = useState(
     new Map({
@@ -58,16 +61,16 @@ export default function MapUI() {
         },
       },
     });
+    // console.log('useEffect in MapUI.jsx');
+
     map.addOverlay(overlay);
     map.setTarget(mapRef.current);
     map.on('singleclick', function (evt) {
       marker.getGeometry().setCoordinates(evt.coordinate);
-      console.log(evt.coordinate);
-      const coordinate = evt.coordinate;
-      const hdms = toStringHDMS(toLonLat(coordinate));
-      const content = popupContent.current;
-      content.innerHTML = '<p>You clicked here:</p><code>' + hdms + '</code>';
-      overlay.setPosition(coordinate);
+      // console.log(evt.coordinate);
+
+      setCoordinates(toStringHDMS(toLonLat(evt.coordinate)));
+      overlay.setPosition(evt.coordinate);
     });
   }, [map]);
 
@@ -78,9 +81,8 @@ export default function MapUI() {
         ref={mapRef}
         className='map-container'
       />
-      <div id='map-popup' className={classes.popup} ref={popup}>
-        <Popover placement='top' trigger='click' />
-        <div id='map-popup-content' ref={popupContent}></div>
+      <div id='map-popup' className={classes['ol-popup']} ref={popup}>
+        <PopUp coordinates={coordinates} closePopup={closePopup} />
       </div>
     </>
   );
