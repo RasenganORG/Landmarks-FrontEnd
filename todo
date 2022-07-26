@@ -1,22 +1,33 @@
 Completed:
-Create Room Modal
-Join Room Modal
-Logout Modal
 
-Add Map with OpenLayers
-Add Events and Marker on Map buttons in Top Nav
+- Create Room Modal
+- Join Room Modal
+- Logout Modal
 
-Finish Members and Chat components
+- Add Map with OpenLayers
+- Add Event Modal on Navbar and inside Create Room
+- Add Event and Add Marker buttons on Navbar
 
-Simulate Logged in Status
-Create Account Form
+- Implement Mockup Members and Chat components
 
-ToDo:
-Add Event Modal on Navbar and inside Create Room
-Add Event button and Add Marker on Navbar
-->Add Event has to have full timestamp and a dropdown with already dropped/drawn markers from the map
+- Login User Form
+- Register User Form
+- Simulate Logged in Status
 
-        When: Date Input
-        Where: Select Input
+- Open a popup and add a marker on the map when the map is clicked
+- Add 'Add Event' and 'Add Marker' buttons to popup
 
-Make it so that we can change the ant design theme easy
+Pending:
+
+- Make it so that we can change the ant design theme easy
+
+To Do:
+
+- 'Add Event' has to have full timestamp and a dropdown with already dropped/drawn markers from the map:
+  When: Date Input
+  Where: Select Input
+- Remove marker when map-popup is closed
+- Replace marker icon
+- Create an object with map data when adding a marker using 'Add Marker' modal
+- Create an object with map data when adding a marker using 'Add Event' modal
+- Memorize markers on map (create an array of markers)
