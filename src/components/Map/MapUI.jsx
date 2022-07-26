@@ -16,22 +16,30 @@ import OSM from 'ol/source/OSM';
 import PopUp from './PopUp';
 import { useDispatch } from 'react-redux';
 
-const marker = new Feature({
-  geometry: new Point([[]]),
-});
-
-const vectorSource = new VectorSource({
-  features: [marker],
-});
-
 export default function MapUI() {
   const dispatch = useDispatch();
   const mapRef = useRef();
   const popup = useRef();
   const [coordinates, setCoordinates] = useState('');
+  const [newMarker, setNewMarker] = useState(
+    new Feature({
+      geometry: new Point([[]]),
+      name: '',
+    })
+  );
+
+  const [newMarkersLayer] = useState(
+    new VectorLayer({
+      properties: { name: 'newMarkers' },
+      source: new VectorSource({
+        features: [newMarker],
+      }),
+    })
+  );
 
   const closePopup = () => {
     map.getOverlayById('map-popup').setPosition(undefined);
+    map.removeLayer(newMarkersLayer);
   };
 
   const [map] = useState(
@@ -42,7 +50,10 @@ export default function MapUI() {
           source: new OSM(),
         }),
         new VectorLayer({
-          source: vectorSource,
+          properties: { name: 'existingMarkers' },
+          source: new VectorSource({
+            // features: [marker],
+          }),
         }),
       ],
       view: new View({
@@ -69,9 +80,10 @@ export default function MapUI() {
     map.addOverlay(overlay);
     map.setTarget(mapRef.current);
     map.on('singleclick', function (evt) {
+      map.addLayer(newMarkersLayer);
       dispatch(drawerActions.closeDrawer());
-      marker.getGeometry().setCoordinates(evt.coordinate);
-      // console.log(evt.coordinate);
+      newMarker.getGeometry().setCoordinates(evt.coordinate);
+      // console.log(typeof evt.coordinate);
 
       setCoordinates(toStringHDMS(toLonLat(evt.coordinate)));
       overlay.setPosition(evt.coordinate);
