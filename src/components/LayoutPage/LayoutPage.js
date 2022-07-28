@@ -35,7 +35,6 @@ const LayoutPage = () => {
   }, [currentPath]);
 
   const onClickRooms = (e) => {
-    console.log(e.key);
     // Set current active menu item
     if (e.key === 'createRoom') {
       navigate('rooms/new');
