@@ -12,7 +12,6 @@ const register = async (userData) => {
     },
   });
 
-  console.log('register response.data', response.data);
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data));
   }
@@ -24,8 +23,6 @@ const login = async (userData) => {
   const response = await axios.get(
     `${API_GET_LOGGED_USER}${userData.email}/?pwd=${userData.password}`
   );
-
-  console.log('login response.data', response.data);
 
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data));
