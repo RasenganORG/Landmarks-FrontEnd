@@ -1,41 +1,47 @@
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { PlusSquareOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import classes from './LayoutPage.module.css';
+
 const { Header, Content, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
+function getItem(label, key, icon, path, children) {
   return {
+    label,
     key,
     icon,
+    path,
     children,
-    label,
   };
 }
 
-const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [
-    getItem('Team 1', '6'),
-    getItem('Team 2', '8'),
-  ]),
-  getItem('Files', '9', <FileOutlined />),
+const menuItems = [
+  getItem('Create Room', 'createRoom', <PlusSquareOutlined />, '/rooms/new'),
 ];
 
 const LayoutPage = () => {
+  const [current, setCurrent] = useState('');
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const currentPath = location.pathname;
+
+  useEffect(() => {
+    menuItems.forEach((item) =>
+      setCurrent(item.path === currentPath ? item.key : '')
+    );
+  }, [currentPath]);
+
+  const onClickRooms = (e) => {
+    // Set current active menu item
+    if (e.key === 'createRoom') {
+      navigate('rooms/new');
+      return;
+    }
+  };
+
   return (
     <Layout
       style={{
@@ -50,9 +56,10 @@ const LayoutPage = () => {
         <div className='logo' />
         <Menu
           theme='dark'
-          defaultSelectedKeys={['1']}
+          selectedKeys={[current]}
           mode='inline'
-          items={items}
+          items={menuItems}
+          onClick={onClickRooms}
         />
       </Sider>
       <Layout className='site-layout'>
@@ -68,7 +75,7 @@ const LayoutPage = () => {
           }}
         >
           <div
-            className='site-layout-background'
+            className={classes['layout-content']}
             style={{
               padding: 24,
               minHeight: 360,
