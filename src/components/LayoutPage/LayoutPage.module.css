@@ -1,14 +1,14 @@
 .layout-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .logout {
-    position: absolute;
-    bottom: 50px;
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  position: absolute;
+  bottom: 50px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
