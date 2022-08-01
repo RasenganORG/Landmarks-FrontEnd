@@ -1,7 +1,7 @@
-import './App.css';
 import 'antd/dist/antd.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LayoutPage from './components/LayoutPage/LayoutPage';
+
 import Home from './components/Home/Home';
 import { RoomItem, CreateRoom, EditRoom } from './components/Rooms';
 import Profile from './components/Profile/Profile';
