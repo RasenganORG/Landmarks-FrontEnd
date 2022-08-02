@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, register } from './authSlice';
+import { successToast, errorToast } from '../../helpers/messageToast';
 
 import {
   LockOutlined,
@@ -14,7 +15,7 @@ import { Button, Form, Input, Row, Col, Spin } from 'antd';
 const antIcon = (
   <LoadingOutlined
     style={{
-      fontSize: 24,
+      fontSize: 64,
     }}
     spin
   />
@@ -23,39 +24,54 @@ const antIcon = (
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
-  const { user, isLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const {
+    user,
+    isLoading,
+    isSuccess,
+    isError,
+    message: authStateMessage,
+  } = useSelector((state) => state.auth);
 
   const onFinish = (values) => {
     const userData = { ...values.user };
-    console.log('Registered form userData', userData);
     dispatch(register(userData));
   };
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      errorToast(authStateMessage);
     }
-    if (isSuccess || user) {
+    if (isSuccess) {
+      navigate('/');
+      successToast(`Welcome, ${authStateMessage}`);
+    }
+    if (user) {
       navigate('/');
     }
-    dispatch(authActions.reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
-  if (isLoading) return <Spin indicator={antIcon} />;
+    dispatch(authActions.reset());
+  }, [user, isError, isSuccess, authStateMessage, navigate, dispatch]);
+
+  if (isLoading)
+    return (
+      <div className='spin-container'>
+        <Spin indicator={antIcon} tip='Loading...' />
+      </div>
+    );
 
   return (
     <Row align='middle' style={{ height: '100vh' }}>
       <Col span={6} offset={9}>
         <Form
+          form={form}
           name='register-user'
-          className='login-form'
           initialValues={{
             remember: true,
           }}
           onFinish={onFinish}
+          preserve={true}
         >
           <Form.Item
             name={['user', 'name']}
@@ -113,6 +129,9 @@ export default function Register() {
             >
               Register
             </Button>
+            <span>
+              Go back to <Link to='/login'>Login</Link>.
+            </span>
           </Form.Item>
         </Form>
       </Col>

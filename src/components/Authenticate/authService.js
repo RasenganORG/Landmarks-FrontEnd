@@ -3,7 +3,6 @@ import axios from 'axios';
 const API_GET_LOGGED_USER = 'http://localhost:8080/api/getLoggedUser/';
 const API_REGISTER_USER = 'http://localhost:8080/api/user/';
 
-//register user
 const register = async (userData) => {
   const response = await axios.post(API_REGISTER_USER, userData, {
     headers: {
@@ -18,7 +17,6 @@ const register = async (userData) => {
   return response.data;
 };
 
-//login user
 const login = async (userData) => {
   const response = await axios.get(
     `${API_GET_LOGGED_USER}${userData.email}/?pwd=${userData.password}`
