@@ -6,6 +6,19 @@
   float: left;
 }
 
+.site-form-item-icon {
+  margin-right: 5px;
+}
+
 .login-form-button {
   width: 100%;
+  margin-bottom: 10px;
+}
+
+.spin-container {
+  width: auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
