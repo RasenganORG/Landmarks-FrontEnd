@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, login } from './authSlice';
 import './Login.css';
+import { successToast, errorToast } from '../../helpers/messageToast';
 
-import { LockOutlined, UserOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Row, Col, Spin } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -10,7 +11,7 @@ import { useEffect } from 'react';
 const antIcon = (
   <LoadingOutlined
     style={{
-      fontSize: 24,
+      fontSize: 64,
     }}
     spin
   />
@@ -19,39 +20,53 @@ const antIcon = (
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
 
-  const { user, isLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const {
+    user,
+    isLoading,
+    isSuccess,
+    isError,
+    message: authStateMessage,
+  } = useSelector((state) => state.auth);
 
   const onFinish = (values) => {
     const userData = { ...values.user };
-    console.log('Logged in userData', userData);
     dispatch(login(userData));
   };
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      errorToast(authStateMessage);
     }
-    if (isSuccess || user) {
+    if (isSuccess) {
+      navigate('/');
+      successToast(`Welcome, ${authStateMessage}`);
+    }
+    if (user) {
       navigate('/');
     }
     dispatch(authActions.reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  }, [user, isError, isSuccess, authStateMessage, navigate, dispatch]);
 
-  if (isLoading) return <Spin indicator={antIcon} />;
+  if (isLoading)
+    return (
+      <div className='spin-container'>
+        <Spin indicator={antIcon} tip='Loading...' />
+      </div>
+    );
 
   return (
     <Row align='middle' style={{ height: '100vh' }}>
       <Col span={6} offset={9}>
         <Form
+          form={form}
           name='login-user'
-          className='login-form'
           initialValues={{
             remember: true,
           }}
           onFinish={onFinish}
+          preserve
         >
           <Form.Item
             name={['user', 'email']}
@@ -64,7 +79,7 @@ export default function Login() {
             ]}
           >
             <Input
-              prefix={<UserOutlined className='site-form-item-icon' />}
+              prefix={<MailOutlined className='site-form-item-icon' />}
               placeholder='Email'
               data-cy='login-email-input'
             />
@@ -89,10 +104,6 @@ export default function Login() {
             <Form.Item name='remember' valuePropName='checked' noStyle>
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
-
-            {/* <a className='login-form-forgot' href=''>
-              Forgot password
-            </a> */}
           </Form.Item>
 
           <Form.Item>
