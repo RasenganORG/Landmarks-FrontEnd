@@ -1,5 +1,8 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 export function EditRoom() {
-  return <div>EditRoom</div>;
+  const { roomID } = useParams();
+
+  return <div>Edit Room @{roomID}</div>;
 }

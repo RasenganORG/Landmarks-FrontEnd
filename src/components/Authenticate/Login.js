@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions, login } from './authSlice';
+import { userActions, login } from './userSlice';
 import './Login.css';
 import { successToast, errorToast } from '../../helpers/messageToast';
 
@@ -28,7 +28,7 @@ export default function Login() {
     isSuccess,
     isError,
     message: authStateMessage,
-  } = useSelector((state) => state.auth);
+  } = useSelector((state) => state.user);
 
   const onFinish = (values) => {
     const userData = { ...values.user };
@@ -46,7 +46,7 @@ export default function Login() {
     if (user) {
       navigate('/');
     }
-    dispatch(authActions.reset());
+    dispatch(userActions.reset());
   }, [user, isError, isSuccess, authStateMessage, navigate, dispatch]);
 
   if (isLoading)

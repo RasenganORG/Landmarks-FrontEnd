@@ -23,10 +23,11 @@ function App() {
           }
         >
           <Route index element={<Home />} />
-          <Route path='rooms' element={<Home />} />
-          <Route path='rooms/:roomId' element={<RoomItem />} />
-          <Route path='rooms/new' element={<CreateRoom />} />
-          <Route path='rooms/edit' element={<EditRoom />} />
+          <Route path='rooms' element={<Home />}>
+            <Route path='new' element={<CreateRoom />} />
+            <Route path=':roomID' element={<RoomItem />} />
+            <Route path=':roomID/edit' element={<EditRoom />} />
+          </Route>
           <Route path='profile/:id' element={<Profile />} />
         </Route>
 

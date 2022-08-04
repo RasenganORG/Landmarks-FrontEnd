@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions, register } from './authSlice';
+import { userActions, register } from './userSlice';
 import { successToast, errorToast } from '../../helpers/messageToast';
 
 import {
@@ -32,7 +32,7 @@ export default function Register() {
     isSuccess,
     isError,
     message: authStateMessage,
-  } = useSelector((state) => state.auth);
+  } = useSelector((state) => state.user);
 
   const onFinish = (values) => {
     const userData = { ...values.user };
@@ -51,7 +51,7 @@ export default function Register() {
       navigate('/');
     }
 
-    dispatch(authActions.reset());
+    dispatch(userActions.reset());
   }, [user, isError, isSuccess, authStateMessage, navigate, dispatch]);
 
   if (isLoading)

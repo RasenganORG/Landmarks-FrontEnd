@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import authService from './authService';
+import userService from './userService';
 
 // Get user from localStorage
 const user = JSON.parse(localStorage.getItem('user'));
@@ -13,30 +13,47 @@ const initialState = {
 };
 
 export const register = createAsyncThunk(
-  'auth/register',
+  'user/register',
   async (user, thunkAPI) => {
     try {
-      return await authService.register(user);
+      return await userService.register(user);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
 
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
+export const login = createAsyncThunk('user/login', async (user, thunkAPI) => {
   try {
-    return await authService.login(user);
+    return await userService.login(user);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
+export const logout = createAsyncThunk('user/logout', async () => {
+  await userService.logout();
 });
 
-const authSlice = createSlice({
-  name: 'auth',
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async ({ userID, roomList }, thunkAPI) => {
+    try {
+      return await userService.updateUser({ userID, roomList });
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+const userSlice = createSlice({
+  name: 'user',
   initialState: initialState,
   reducers: {
     reset(state) {
@@ -80,9 +97,23 @@ const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        // `action.payload` is an `user` object response from `updateUser API`
+        state.user = { ...action.payload };
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
-export const authActions = authSlice.actions;
-export default authSlice.reducer;
+export const userActions = userSlice.actions;
+export default userSlice.reducer;
