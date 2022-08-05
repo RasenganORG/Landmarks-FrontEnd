@@ -1,38 +1,65 @@
-import { Layout, Menu, Col, Row } from 'antd';
-import { Content, Header } from 'antd/lib/layout/layout';
-import React from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import { Layout, Menu, Col, Row, Typography, Tooltip } from 'antd';
+import { Content } from 'antd/lib/layout/layout';
+
+import classes from './RoomItem.module.css';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import Spinner from '../LayoutPage/Spinner';
 
 export function RoomItem() {
   const { roomID } = useParams();
-  // const dispatch = useDispatch();
+
+  const currentRoom = useSelector((state) =>
+    state.room.rooms?.find((room) => room.id === roomID)
+  );
+
+  const userID = useSelector((state) => state.user.user.id);
+
+  if (!currentRoom) return <Spinner />;
+
   // const currentDrawer = useSelector((state) => state.drawer.currentDrawer);
 
-  const roomItems = [
+  const roomNavItems = [
     {
-      key: '1',
+      key: 'Chat',
       label: 'Chat',
     },
     {
-      key: '2',
+      key: 'Members',
       label: 'Members',
     },
     {
-      key: '3',
+      key: 'Landmark',
       label: 'Add Landmark',
     },
     {
-      key: '4',
+      key: 'Event',
       label: 'Add Event',
+    },
+    {
+      key: 'Edit',
+      label: 'Edit',
+    },
+    {
+      key: 'Invite',
+      label:
+        userID === currentRoom.ownerID ? (
+          <Tooltip
+            title='Invite link has been generated.'
+            trigger={'click'}
+            mouseLeaveDelay={0}
+          >
+            <span>{`Invite Code: ${currentRoom.id}`}</span>
+          </Tooltip>
+        ) : (
+          ''
+        ),
     },
   ];
 
   const handleMenuItemClick = ({ key }) => {
-    console.log('key', key);
-
+    // console.log('key', key);
     // console.log('drawer', currentDrawer);
-
     // if (key === '1') {
     //   if (key === currentDrawer) {
     //     dispatch(drawerActions.closeDrawer());
@@ -59,45 +86,41 @@ export function RoomItem() {
     //   dispatch(modalActions.openModal('Events'));
     //   dispatch(drawerActions.closeDrawer());
     // }
+    if (key === 'Invite') {
+      navigator.clipboard.writeText(`${window.location.href}/join`);
+    }
   };
+
   return (
     <Layout
       style={{
         minWidth: '100%',
-        padding: '0 10px',
+        // padding: '0 10px',
       }}
     >
       <Row>
-        <Col offset={8} span={8}>
-          <Header
-            style={
-              {
-                // maxHeight: '0',
-              }
-            }
-          >
-            <Menu
-              theme='dark'
-              mode='horizontal'
-              defaultSelectedKeys={['']}
-              selectedKeys={['']}
-              // defaultSelectedKeys={[currentDrawer]}
-              // selectedKeys={[currentDrawer]}
-              onClick={handleMenuItemClick}
-              items={roomItems}
-              style={{
-                // maxHeight: '30px',
-                fontSize: '16px',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            />
-          </Header>
+        <Col span={4}>
+          <div className={classes['room-name']}>
+            <Typography.Title level={3} style={{ margin: 0, color: 'aqua' }}>
+              {currentRoom.name}
+            </Typography.Title>
+          </div>
+        </Col>
+        <Col span={20}>
+          <Menu
+            theme='dark'
+            mode='horizontal'
+            defaultSelectedKeys={['']}
+            selectedKeys={['']}
+            // defaultSelectedKeys={[currentDrawer]}
+            // selectedKeys={[currentDrawer]}
+            onClick={handleMenuItemClick}
+            items={roomNavItems}
+          />
         </Col>
       </Row>
-
       <Content>
-        <div>Room Item @{roomID}</div>
+        <div className={classes['map-container']}></div>
       </Content>
     </Layout>
   );

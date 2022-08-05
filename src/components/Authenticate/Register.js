@@ -4,22 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userActions, register } from './userSlice';
 import { successToast, errorToast } from '../../helpers/messageToast';
 
-import {
-  LockOutlined,
-  UserOutlined,
-  MailOutlined,
-  LoadingOutlined,
-} from '@ant-design/icons';
-import { Button, Form, Input, Row, Col, Spin } from 'antd';
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 64,
-    }}
-    spin
-  />
-);
+import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Row, Col } from 'antd';
+import Spinner from '../LayoutPage/Spinner';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -57,7 +44,7 @@ export default function Register() {
   if (isLoading)
     return (
       <div className='spin-container'>
-        <Spin indicator={antIcon} tip='Loading...' />
+        <Spinner tip='Getting everything ready for you...' />
       </div>
     );
 

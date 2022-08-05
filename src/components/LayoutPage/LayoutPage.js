@@ -1,82 +1,23 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 
 import ModalUI from './ModalUI';
 import classes from './LayoutPage.module.css';
-import { modalActions } from './modalSlice';
 
-import { PlusSquareOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
+import Spinner from './Spinner';
+import MenuUI from './MenuUI';
+
 const { Content, Sider } = Layout;
 
-function getItem(label, key, icon, path, children) {
-  return {
-    label,
-    key,
-    icon,
-    path,
-    children,
-  };
-}
-
-const menuItems = [
-  getItem('Create Room', 'createRoom', <PlusSquareOutlined />, '/rooms/new'),
-];
-
-const logoutItem = [getItem('Logout', '9', <LogoutOutlined />)];
-
 const LayoutPage = () => {
-  const [current, setCurrent] = useState('');
   const [collapsed, setCollapsed] = useState(false);
-  const [rooms, setRooms] = useState([]);
+  const [current, setCurrent] = useState('');
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const userState = useSelector((state) => state.user);
 
-  const currentPath = location.pathname;
-
-  // Add Loading for creating Room - roomState.isLoading and userState.isLoading
-
-  useEffect(() => {
-    const getRooms = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/${user.id}/rooms/`
-      );
-      const data = await response.json();
-      console.log(data);
-      setRooms([
-        ...data.map((room) =>
-          getItem(`${room.name}`, `${room.id}`, null, `/rooms/${room.id}`)
-        ),
-      ]);
-    };
-    getRooms();
-  }, [user]);
-
-  useEffect(() => {
-    // If a menu item path correspons with the current url path, then set that menu item active
-    const menus = [...menuItems, ...rooms];
-    menus.forEach((item) => {
-      if (item.path === currentPath) setCurrent(item.key);
-    });
-  }, [currentPath, rooms]);
-
-  const onClickRooms = (e) => {
-    // Set current active menu item
-    if (e.key === 'createRoom') {
-      navigate('rooms/new');
-      return;
-    } else navigate(`/rooms/${e.key}`);
-  };
-
-  const onLogout = (e) => {
-    dispatch(modalActions.openModal('Logout'));
-    setCurrent('');
-    // Log out the user
-  };
+  const roomState = useSelector((state) => state.room);
 
   return (
     <>
@@ -91,46 +32,27 @@ const LayoutPage = () => {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className='logo' />
-          <Menu
-            theme='dark'
-            selectedKeys={[current]}
-            mode='inline'
-            items={menuItems}
-            onClick={onClickRooms}
+          <MenuUI
+            current={current}
+            setCurrent={setCurrent}
+            classes={classes}
+            isLoading={roomState.isLoading || userState.isLoading}
           />
-          <br />
-          <br />
-
-          <Menu
-            theme='dark'
-            selectedKeys={[current]}
-            mode='inline'
-            items={rooms}
-            onClick={onClickRooms}
-          />
-
-          <div className={classes.logout}>
-            <Menu
-              theme='dark'
-              selectedKeys={['']}
-              onClick={onLogout}
-              mode='vertical'
-              items={logoutItem}
-              style={{
-                fontSize: '16px',
-              }}
-            />
-          </div>
         </Sider>
         <Layout className='site-layout'>
           <Content>
             <div
               className={classes['layout-content']}
               style={{
-                minHeight: 360,
+                height: '100%',
+                width: '100%',
               }}
             >
-              <Outlet />
+              {roomState.isLoading || userState.isLoading ? (
+                <Spinner tip='Starting your next adventure...' />
+              ) : (
+                <Outlet />
+              )}
             </div>
           </Content>
         </Layout>

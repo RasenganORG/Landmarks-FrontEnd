@@ -1,5 +1,4 @@
 import { Button, Select, Form, Input, Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
 import debounce from 'lodash/debounce';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -8,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { roomActions, addRoomToDB } from './roomSlice';
 import { updateUser, userActions } from '../Authenticate/userSlice';
+import Spinner from '../LayoutPage/Spinner';
 
 const { Option } = Select;
 
@@ -19,15 +19,6 @@ const layout = {
     span: 24,
   },
 };
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 24,
-    }}
-    spin
-  />
-);
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
   const [fetching, setFetching] = useState(false);
@@ -84,13 +75,16 @@ export function CreateRoom() {
   const roomState = useSelector((state) => state.room);
 
   const onSubmit = (formValues) => {
-    const room = { ...formValues, ownerID: userState.user.id };
+    const room = {
+      ...formValues,
+      ownerID: userState.user.id,
+      createdOn: new Date().toUTCString(),
+    };
     // Add current user ID to room.members
     !room.members.includes(userState.user.id) &&
       room.members.push(userState.user.id);
 
-    console.log(room);
-    dispatch(roomActions.setRoom(room));
+    // dispatch(roomActions.setRoom(room));
     dispatch(addRoomToDB(room));
   };
 
@@ -101,21 +95,24 @@ export function CreateRoom() {
     if (roomState.isSuccess) {
       // Add room ID to user.roomList
       const roomList = [...userState.user.roomList];
-      !roomList.includes(roomState.room.id) && roomList.push(roomState.room.id);
 
-      console.log('roomList:', roomList);
-
-      dispatch(updateUser({ userID: userState.user.id, roomList }));
+      if (!roomList.includes(roomState.newRoom.id)) {
+        roomList.push(roomState.newRoom.id);
+        dispatch(updateUser({ userID: userState.user.id, roomList }));
+      }
+    }
+    if (userState.isError) {
+      console.log(userState.message);
     }
     if (userState.isSuccess) {
-      navigate(`../${roomState.room.id}`);
+      navigate(`../${roomState.newRoom.id}`);
     }
     dispatch(roomActions.reset());
     dispatch(userActions.reset());
   }, [roomState, userState, navigate, dispatch]);
 
   if (roomState.isLoading || userState.isLoading)
-    return <Spin indicator={antIcon} />;
+    return <Spinner tip='Starting your next adventure...' />;
 
   return (
     <Form
