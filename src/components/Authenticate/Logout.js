@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { modalActions } from '../LayoutPage/modalSlice';
-import { logout, authActions } from './authSlice';
+import { logout, userActions } from './userSlice';
 
 import { Button, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ export default function Logout() {
 
   const onLogout = () => {
     dispatch(logout());
-    dispatch(authActions.reset());
+    dispatch(userActions.reset());
     dispatch(modalActions.closeModal());
     navigate('/');
   };

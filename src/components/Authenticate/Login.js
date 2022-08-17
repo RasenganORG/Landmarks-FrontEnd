@@ -1,21 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions, login } from './authSlice';
+import { userActions, login } from './userSlice';
 import './Login.css';
 import { successToast, errorToast } from '../../helpers/messageToast';
 
-import { LockOutlined, MailOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Row, Col, Spin } from 'antd';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Row, Col } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 64,
-    }}
-    spin
-  />
-);
+import Spinner from '../LayoutPage/Spinner';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -28,7 +20,7 @@ export default function Login() {
     isSuccess,
     isError,
     message: authStateMessage,
-  } = useSelector((state) => state.auth);
+  } = useSelector((state) => state.user);
 
   const onFinish = (values) => {
     const userData = { ...values.user };
@@ -46,13 +38,13 @@ export default function Login() {
     if (user) {
       navigate('/');
     }
-    dispatch(authActions.reset());
+    dispatch(userActions.reset());
   }, [user, isError, isSuccess, authStateMessage, navigate, dispatch]);
 
   if (isLoading)
     return (
       <div className='spin-container'>
-        <Spin indicator={antIcon} tip='Loading...' />
+        <Spinner tip='Getting everything ready for you...' />
       </div>
     );
 

@@ -1,59 +1,23 @@
-import { PlusSquareOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 
 import ModalUI from './ModalUI';
 import classes from './LayoutPage.module.css';
-import { modalActions } from './modalSlice';
 
-const { Header, Content, Sider } = Layout;
+import { Layout } from 'antd';
+import Spinner from './Spinner';
+import MenuUI from './MenuUI';
 
-function getItem(label, key, icon, path, children) {
-  return {
-    label,
-    key,
-    icon,
-    path,
-    children,
-  };
-}
-
-const menuItems = [
-  getItem('Create Room', 'createRoom', <PlusSquareOutlined />, '/rooms/new'),
-];
-
-const logoutItem = [getItem('Logout', '9', <LogoutOutlined />)];
+const { Content, Sider } = Layout;
 
 const LayoutPage = () => {
-  const [current, setCurrent] = useState('');
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
+  const [current, setCurrent] = useState('');
 
-  const currentPath = location.pathname;
+  const userState = useSelector((state) => state.user);
 
-  useEffect(() => {
-    menuItems.forEach((item) =>
-      setCurrent(item.path === currentPath ? item.key : '')
-    );
-  }, [currentPath]);
-
-  const onClickRooms = (e) => {
-    // Set current active menu item
-    if (e.key === 'createRoom') {
-      navigate('rooms/new');
-      return;
-    }
-  };
-
-  const onLogout = (e) => {
-    dispatch(modalActions.openModal('Logout'));
-    setCurrent('');
-    // Log out the user
-  };
+  const roomState = useSelector((state) => state.room);
 
   return (
     <>
@@ -68,47 +32,27 @@ const LayoutPage = () => {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className='logo' />
-          <Menu
-            theme='dark'
-            selectedKeys={[current]}
-            mode='inline'
-            items={menuItems}
-            onClick={onClickRooms}
+          <MenuUI
+            current={current}
+            setCurrent={setCurrent}
+            classes={classes}
+            isLoading={roomState.isLoading || userState.isLoading}
           />
-
-          <div className={classes.logout}>
-            <Menu
-              theme='dark'
-              selectedKeys={['']}
-              onClick={onLogout}
-              mode='vertical'
-              items={logoutItem}
-              style={{
-                fontSize: '16px',
-              }}
-            />
-          </div>
         </Sider>
         <Layout className='site-layout'>
-          <Header
-            className='site-layout-background'
-            style={{
-              padding: 0,
-            }}
-          />
-          <Content
-            style={{
-              margin: '0 16px',
-            }}
-          >
+          <Content>
             <div
               className={classes['layout-content']}
               style={{
-                padding: 24,
-                minHeight: 360,
+                height: '100%',
+                width: '100%',
               }}
             >
-              <Outlet />
+              {roomState.isLoading || userState.isLoading ? (
+                <Spinner tip='Starting your next adventure...' />
+              ) : (
+                <Outlet />
+              )}
             </div>
           </Content>
         </Layout>

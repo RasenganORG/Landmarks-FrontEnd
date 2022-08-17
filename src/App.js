@@ -9,6 +9,7 @@ import Login from './components/Authenticate/Login';
 import Register from './components/Authenticate/Register';
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/Authenticate/PrivateRoute';
+import JoinRoom from './components/Rooms/JoinRoom';
 
 function App() {
   return (
@@ -23,10 +24,12 @@ function App() {
           }
         >
           <Route index element={<Home />} />
-          <Route path='rooms' element={<Home />} />
-          <Route path='rooms/:roomId' element={<RoomItem />} />
-          <Route path='rooms/new' element={<CreateRoom />} />
-          <Route path='rooms/edit' element={<EditRoom />} />
+          <Route path='rooms' element={<Home />}>
+            <Route path='new' element={<CreateRoom />} />
+            <Route path=':roomID' element={<RoomItem />} />
+            <Route path=':roomID/edit' element={<EditRoom />} />
+            <Route path=':roomID/join' element={<JoinRoom />} />
+          </Route>
           <Route path='profile/:id' element={<Profile />} />
         </Route>
 

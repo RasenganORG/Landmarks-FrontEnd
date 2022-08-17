@@ -1,6 +1,13 @@
-import { useMemo, useRef, useState } from 'react';
 import { Button, Select, Form, Input, Spin } from 'antd';
 import debounce from 'lodash/debounce';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { roomActions, addRoomToDB } from './roomSlice';
+import { updateUser, userActions } from '../Authenticate/userSlice';
+import Spinner from '../LayoutPage/Spinner';
 
 const { Option } = Select;
 
@@ -17,6 +24,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState([]);
   const fetchRef = useRef(0);
+
   const debounceFetcher = useMemo(() => {
     const loadOptions = (value) => {
       fetchRef.current += 1;
@@ -36,6 +44,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
 
     return debounce(loadOptions, debounceTimeout);
   }, [fetchOptions, debounceTimeout]);
+
   return (
     <Select
       labelInValue
@@ -49,24 +58,61 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
 } // Usage of DebounceSelect
 
 async function fetchUserList(username) {
-  console.log('fetching user', username);
-  return fetch('https://randomuser.me/api/?results=5')
+  return fetch(`http://localhost:8080/api/user/${username}`)
     .then((response) => response.json())
-    .then((body) =>
-      body.results.map((user) => ({
-        label: `${user.name.first} ${user.name.last}`,
-        value: user.login.username,
-      }))
-    );
+    .then((user) => [
+      { label: `${user.name} - ${user.email}`, value: user.id },
+    ]);
 }
-
-const onSubmit = (values) => {
-  const roomData = { ...values };
-  console.log('Room data:', roomData);
-};
 
 export function CreateRoom() {
   const [value, setValue] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const userState = useSelector((state) => state.user);
+
+  const roomState = useSelector((state) => state.room);
+
+  const onSubmit = (formValues) => {
+    const room = {
+      ...formValues,
+      ownerID: userState.user.id,
+      createdOn: new Date().toUTCString(),
+    };
+    // Add current user ID to room.members
+    !room.members.includes(userState.user.id) &&
+      room.members.push(userState.user.id);
+
+    // dispatch(roomActions.setRoom(room));
+    dispatch(addRoomToDB(room));
+  };
+
+  useEffect(() => {
+    if (roomState.isError) {
+      console.log(roomState.message);
+    }
+    if (roomState.isSuccess) {
+      // Add room ID to user.roomList
+      const roomList = [...userState.user.roomList];
+
+      if (!roomList.includes(roomState.newRoom.id)) {
+        roomList.push(roomState.newRoom.id);
+        dispatch(updateUser({ userID: userState.user.id, roomList }));
+      }
+    }
+    if (userState.isError) {
+      console.log(userState.message);
+    }
+    if (userState.isSuccess) {
+      navigate(`../${roomState.newRoom.id}`);
+    }
+    dispatch(roomActions.reset());
+    dispatch(userActions.reset());
+  }, [roomState, userState, navigate, dispatch]);
+
+  if (roomState.isLoading || userState.isLoading)
+    return <Spinner tip='Starting your next adventure...' />;
 
   return (
     <Form
@@ -75,15 +121,16 @@ export function CreateRoom() {
       labelAlign='left'
       style={{ width: '100%', maxWidth: '700px' }}
       initialValues={{
-        roomName: '',
-        password: '',
-        selectTemplate: 'Room 1',
-        selectMap: 'None',
+        name: '',
+        template: 'Room 1',
+        map: 'None',
+        members: [],
+        events: {},
       }}
       onFinish={onSubmit}
     >
       <Form.Item
-        name='roomName'
+        name='name'
         label='Room Name'
         rules={[
           {
@@ -94,20 +141,8 @@ export function CreateRoom() {
       >
         <Input data-cy='room-name-input' />
       </Form.Item>
-      <Form.Item
-        name='password'
-        label='Room Password'
-        rules={[
-          {
-            required: true,
-            message: 'Please enter a password for the room !',
-          },
-        ]}
-      >
-        <Input type='password' />
-      </Form.Item>
 
-      <Form.Item name='selectTemplate' label='Select from template'>
+      <Form.Item name='template' label='Select from template'>
         <Select placeholder='Create room from template'>
           <Option value='None'>None</Option>
           <Option value='Room 1'>Room 1</Option>
@@ -115,13 +150,13 @@ export function CreateRoom() {
         </Select>
       </Form.Item>
 
-      <Form.Item name='selectMap' label='Select a map'>
+      <Form.Item name='map' label='Select a map'>
         <Select placeholder='Choose a map for your room'>
           <Option value='None'>None</Option>
           <Option value='Option2'>Option2</Option>
         </Select>
       </Form.Item>
-      <Form.Item name='addUsers' label='Add members'>
+      <Form.Item name='members' label='Add members'>
         <DebounceSelect
           mode='multiple'
           value={value}
@@ -135,7 +170,7 @@ export function CreateRoom() {
           }}
         />
       </Form.Item>
-      <Form.Item name='addEvents' label='Add events'>
+      <Form.Item name='events' label='Add events'>
         <Button type='primary' htmlType='button'>
           Add Event
         </Button>

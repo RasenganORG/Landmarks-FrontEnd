@@ -13,6 +13,12 @@ Create Room; room functionality:
 
 Backgorund harta: negru
 
-Add Join Room Modal
 Add Landmarks Modal
 Add Event Modal
+
+Create Join Room actions
+
+Handle error when rooms/:roomID does not exist
+
+Change Room Menu to List in [MenuUI](./src/components/LayoutPage/MenuUI.js)
+Add Edit, Remove icons to each Room Menu Item
