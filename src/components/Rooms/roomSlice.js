@@ -3,7 +3,7 @@ import roomService from './roomService';
 
 const initialState = {
   newRoom: null,
-  rooms: null,
+  rooms: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -61,7 +61,13 @@ const roomSlice = createSlice({
   reducers: {
     setRooms(state, action) {
       // action.payload is a room object
-      state.rooms = [...action.payload];
+      const newRoom = {
+        ...action.payload.room,
+        members: [...action.payload.members],
+        chat: action.payload.chat,
+      };
+      console.log('newRoom', newRoom);
+      state.rooms.push(newRoom);
     },
     reset(state) {
       state.isLoading = false;

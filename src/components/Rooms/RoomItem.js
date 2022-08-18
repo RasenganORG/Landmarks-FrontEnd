@@ -15,7 +15,7 @@ export function RoomItem() {
 
   const userID = useSelector((state) => state.user.user.id);
 
-  if (!currentRoom) return <Spinner />;
+  if (!currentRoom) return <Spinner tip='Room does not exist...' />;
 
   // const currentDrawer = useSelector((state) => state.drawer.currentDrawer);
 

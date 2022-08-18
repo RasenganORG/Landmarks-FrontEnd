@@ -6,7 +6,6 @@ const API_ROOM = 'http://localhost:8080/api/room/';
 const addRoomToDB = async (roomData) => {
   const response = await axios.post(API_ROOM, roomData, {
     headers: {
-      // Overwrite Axios's automatically set Content-Type
       'Content-Type': 'application/json',
     },
   });

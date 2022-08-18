@@ -1,13 +1,12 @@
-import { Button, Select, Form, Input, Spin } from 'antd';
-import debounce from 'lodash/debounce';
+import { Button, Select, Form, Input } from 'antd';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { roomActions, addRoomToDB } from './roomSlice';
 import { updateUser, userActions } from '../Authenticate/userSlice';
-import Spinner from '../LayoutPage/Spinner';
+import { v4 as uuidv4 } from 'uuid';
 
 const { Option } = Select;
 
@@ -20,53 +19,7 @@ const layout = {
   },
 };
 
-function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }) {
-  const [fetching, setFetching] = useState(false);
-  const [options, setOptions] = useState([]);
-  const fetchRef = useRef(0);
-
-  const debounceFetcher = useMemo(() => {
-    const loadOptions = (value) => {
-      fetchRef.current += 1;
-      const fetchId = fetchRef.current;
-      setOptions([]);
-      setFetching(true);
-      fetchOptions(value).then((newOptions) => {
-        if (fetchId !== fetchRef.current) {
-          // for fetch callback order
-          return;
-        }
-
-        setOptions(newOptions);
-        setFetching(false);
-      });
-    };
-
-    return debounce(loadOptions, debounceTimeout);
-  }, [fetchOptions, debounceTimeout]);
-
-  return (
-    <Select
-      labelInValue
-      filterOption={false}
-      onSearch={debounceFetcher}
-      notFoundContent={fetching ? <Spin size='small' /> : null}
-      {...props}
-      options={options}
-    />
-  );
-} // Usage of DebounceSelect
-
-async function fetchUserList(username) {
-  return fetch(`http://localhost:8080/api/user/${username}`)
-    .then((response) => response.json())
-    .then((user) => [
-      { label: `${user.name} - ${user.email}`, value: user.id },
-    ]);
-}
-
 export function CreateRoom() {
-  const [value, setValue] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -75,17 +28,21 @@ export function CreateRoom() {
   const roomState = useSelector((state) => state.room);
 
   const onSubmit = (formValues) => {
-    const room = {
-      ...formValues,
-      ownerID: userState.user.id,
-      createdOn: new Date().toUTCString(),
+    const data = {
+      room: {
+        ...formValues,
+        id: uuidv4(),
+        ownerID: userState.user.id,
+        createdOn: new Date().toUTCString(),
+      },
+      members: [{ id: userState.user.id, name: userState.user.name }],
+      chat: [],
     };
-    // Add current user ID to room.members
-    !room.members.includes(userState.user.id) &&
-      room.members.push(userState.user.id);
+    console.log(data);
 
-    // dispatch(roomActions.setRoom(room));
-    dispatch(addRoomToDB(room));
+    dispatch(roomActions.setRooms(data));
+    console.log(roomState.rooms);
+    // dispatch(addRoomToDB(data));
   };
 
   useEffect(() => {
@@ -107,12 +64,10 @@ export function CreateRoom() {
     if (userState.isSuccess) {
       navigate(`../${roomState.newRoom.id}`);
     }
+    if (roomState.rooms) console.log('rooms', roomState.rooms);
     dispatch(roomActions.reset());
     dispatch(userActions.reset());
   }, [roomState, userState, navigate, dispatch]);
-
-  if (roomState.isLoading || userState.isLoading)
-    return <Spinner tip='Starting your next adventure...' />;
 
   return (
     <Form
@@ -124,8 +79,7 @@ export function CreateRoom() {
         name: '',
         template: 'Room 1',
         map: 'None',
-        members: [],
-        events: {},
+        events: [],
       }}
       onFinish={onSubmit}
     >
@@ -155,20 +109,6 @@ export function CreateRoom() {
           <Option value='None'>None</Option>
           <Option value='Option2'>Option2</Option>
         </Select>
-      </Form.Item>
-      <Form.Item name='members' label='Add members'>
-        <DebounceSelect
-          mode='multiple'
-          value={value}
-          placeholder='Select users'
-          fetchOptions={fetchUserList}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          style={{
-            width: '100%',
-          }}
-        />
       </Form.Item>
       <Form.Item name='events' label='Add events'>
         <Button type='primary' htmlType='button'>

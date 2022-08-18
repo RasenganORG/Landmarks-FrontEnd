@@ -13,7 +13,6 @@ const { Content, Sider } = Layout;
 
 const LayoutPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [current, setCurrent] = useState('');
 
   const userState = useSelector((state) => state.user);
 
@@ -32,12 +31,7 @@ const LayoutPage = () => {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className='logo' />
-          <MenuUI
-            current={current}
-            setCurrent={setCurrent}
-            classes={classes}
-            isLoading={roomState.isLoading || userState.isLoading}
-          />
+          <MenuUI classes={classes} />
         </Sider>
         <Layout className='site-layout'>
           <Content>
