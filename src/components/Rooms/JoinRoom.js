@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateUser } from '../Authenticate/userSlice';
-import { getRoom, roomActions, updateRoom } from './roomSlice';
+import { getRoom, roomActions, addUserToRoomMembership } from './roomSlice';
 import Spinner from '../LayoutPage/Spinner';
 
 export default function JoinRoom() {
@@ -37,7 +37,10 @@ export default function JoinRoom() {
           updateUser({ userID: userState.user.id, roomList: userRooms })
         );
         dispatch(
-          updateRoom({ roomID: roomState.newRoom.id, members: roomMembers })
+          addUserToRoomMembership({
+            roomID: roomState.newRoom.id,
+            members: roomMembers,
+          })
         );
       }
     }

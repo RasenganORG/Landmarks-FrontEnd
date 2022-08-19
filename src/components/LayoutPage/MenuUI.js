@@ -1,12 +1,11 @@
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PlusSquareOutlined, LogoutOutlined } from '@ant-design/icons';
 
 import { modalActions } from './modalSlice';
 import Spinner from './Spinner';
-import { roomActions } from '../Rooms/roomSlice';
 
 function getItem(label, key, icon, path, children) {
   return {
@@ -24,43 +23,15 @@ const menuItems = [
   getItem('Create Room', 'createRoom', <PlusSquareOutlined />, '/rooms/new'),
 ];
 
-export default function MenuUI({ classes }) {
+export default function MenuUI({ classes, rooms, loading }) {
   const [menuRooms, setMenuRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  const rooms = useSelector((state) => state.room.rooms);
 
   const currentPath = location.pathname;
-
-  // Run only once
-  // Fetch rooms from DB on application start or refresh
-  useEffect(() => {
-    const getRoomsForUser = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/${user.id}/rooms/`
-        );
-
-        if (!response.ok)
-          throw new Error(`${response.status} ${response.statusText}`);
-
-        const data = await response.json();
-        console.log('data', data);
-        dispatch(roomActions.setRooms(data));
-
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    if (rooms.length === 0) getRoomsForUser();
-  }, []);
 
   // Change menu based on store rooms
   useEffect(() => {

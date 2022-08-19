@@ -38,11 +38,11 @@ export const getRoom = createAsyncThunk(
   }
 );
 
-export const updateRoom = createAsyncThunk(
-  'room/updateRoom',
-  async ({ roomID, members }, thunkAPI) => {
+export const addUserToRoomMembership = createAsyncThunk(
+  'room/addUserToRoomMembership',
+  async ({ roomID, userID }, thunkAPI) => {
     try {
-      return await roomService.updateRoom({ roomID, members });
+      return await roomService.addUserToRoomMembership({ roomID, userID });
     } catch (error) {
       const message =
         (error.response &&
@@ -59,15 +59,27 @@ const roomSlice = createSlice({
   name: 'room',
   initialState: initialState,
   reducers: {
-    setRooms(state, action) {
-      // action.payload is a room object
+    addRoom(state, action) {
       const newRoom = {
         ...action.payload.room,
         members: [...action.payload.members],
         chat: action.payload.chat,
       };
-      console.log('newRoom', newRoom);
       state.rooms.push(newRoom);
+    },
+    addMultipleRooms(state, action) {
+      state.rooms = [...action.payload];
+    },
+    addMemberToRoom(state, action) {
+      const roomID = action.payload.roomID;
+      const newMember = action.payload.user;
+      state.rooms = [
+        ...state.rooms.map((room) =>
+          room.id === roomID
+            ? { ...room, members: [...room.members, newMember] }
+            : room
+        ),
+      ];
     },
     reset(state) {
       state.isLoading = false;
@@ -85,7 +97,7 @@ const roomSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         // `action.payload` is a `room` object response from `createRoom API`
-        state.newRoom = { ...action.payload };
+        state.newRoom = { id: action.payload };
       })
       .addCase(createRoom.rejected, (state, action) => {
         state.isLoading = false;
@@ -106,16 +118,16 @@ const roomSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(updateRoom.pending, (state) => {
+      .addCase(addUserToRoomMembership.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateRoom.fulfilled, (state, action) => {
+      .addCase(addUserToRoomMembership.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // `action.payload` is a `room` object response from `updateRoom API`
+        // `action.payload` is a `room` object response from `addUserToRoomMembership API`
         state.newRoom = { ...action.payload };
       })
-      .addCase(updateRoom.rejected, (state, action) => {
+      .addCase(addUserToRoomMembership.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

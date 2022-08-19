@@ -4,13 +4,13 @@ const API_ROOM = 'http://localhost:8080/api/room/';
 
 // Create 'room' in DB
 const createRoom = async (roomData) => {
-  const response = await axios.post(API_ROOM, roomData, {
+  await axios.post(API_ROOM, roomData, {
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  // Returns 'room' object
-  return response.data;
+  // Returns 'room.id' string
+  return roomData.id;
 };
 
 // Get 'room' by id
@@ -22,10 +22,10 @@ const getRoom = async (roomID) => {
 };
 
 // update 'room' in DB
-const updateRoom = async ({ roomID, members }) => {
+const addUserToRoomMembership = async ({ roomID, userID }) => {
   const response = await axios.put(
     `${API_ROOM}${roomID}`,
-    { members },
+    { userID },
     {
       headers: {
         // Overwrite Axios's automatically set Content-Type
@@ -38,6 +38,6 @@ const updateRoom = async ({ roomID, members }) => {
   return response.data;
 };
 
-const roomService = { createRoom, updateRoom, getRoom };
+const roomService = { createRoom, addUserToRoomMembership, getRoom };
 
 export default roomService;

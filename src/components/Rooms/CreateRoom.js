@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { roomActions, createRoom } from './roomSlice';
-import { updateUser, userActions } from '../Authenticate/userSlice';
 import { v4 as uuidv4 } from 'uuid';
 
 const { Option } = Select;
@@ -44,35 +43,20 @@ export function CreateRoom() {
       ],
       chat: [],
     };
-    console.log(data.room);
 
-    dispatch(roomActions.setRooms(data));
+    dispatch(roomActions.addRoom(data));
     dispatch(createRoom(data.room));
   };
 
-  // useEffect(() => {
-  //   if (roomState.isError) {
-  //     console.log(roomState.message);
-  //   }
-  //   if (roomState.isSuccess) {
-  //     // Add room ID to user.roomList
-  //     const roomList = [...userState.user.roomList];
-
-  //     if (!roomList.includes(roomState.newRoom.id)) {
-  //       roomList.push(roomState.newRoom.id);
-  //       dispatch(updateUser({ userID: userState.user.id, roomList }));
-  //     }
-  //   }
-  //   if (userState.isError) {
-  //     console.log(userState.message);
-  //   }
-  //   if (userState.isSuccess) {
-  //     navigate(`../${roomState.newRoom.id}`);
-  //   }
-  //   if (roomState.rooms) console.log('rooms', roomState.rooms);
-  //   dispatch(roomActions.reset());
-  //   dispatch(userActions.reset());
-  // }, [roomState, userState, navigate, dispatch]);
+  useEffect(() => {
+    if (roomState.isError) {
+      console.log(roomState.message);
+    }
+    if (roomState.isSuccess) {
+      navigate(`/rooms/${roomState.newRoom.id}`);
+    }
+    dispatch(roomActions.reset());
+  }, [roomState, navigate, dispatch]);
 
   return (
     <Form
