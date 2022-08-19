@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_ROOM = 'http://localhost:8080/api/room/';
 
 // Create 'room' in DB
-const addRoomToDB = async (roomData) => {
+const createRoom = async (roomData) => {
   const response = await axios.post(API_ROOM, roomData, {
     headers: {
       'Content-Type': 'application/json',
@@ -38,6 +38,6 @@ const updateRoom = async ({ roomID, members }) => {
   return response.data;
 };
 
-const roomService = { addRoomToDB, updateRoom, getRoom };
+const roomService = { createRoom, updateRoom, getRoom };
 
 export default roomService;

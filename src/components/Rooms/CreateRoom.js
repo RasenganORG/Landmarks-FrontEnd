@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { roomActions, addRoomToDB } from './roomSlice';
+import { roomActions, createRoom } from './roomSlice';
 import { updateUser, userActions } from '../Authenticate/userSlice';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -35,14 +35,19 @@ export function CreateRoom() {
         ownerID: userState.user.id,
         createdOn: new Date().toUTCString(),
       },
-      members: [{ id: userState.user.id, name: userState.user.name }],
+      members: [
+        {
+          id: userState.user.id,
+          name: userState.user.name,
+          avatar: userState.user.avatar ? userState.user.avatar : null,
+        },
+      ],
       chat: [],
     };
-    console.log(data);
+    console.log(data.room);
 
     dispatch(roomActions.setRooms(data));
-    console.log(roomState.rooms);
-    // dispatch(addRoomToDB(data));
+    dispatch(createRoom(data.room));
   };
 
   useEffect(() => {

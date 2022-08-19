@@ -10,11 +10,11 @@ const initialState = {
   message: '',
 };
 
-export const addRoomToDB = createAsyncThunk(
-  'room/addRoomToDB',
+export const createRoom = createAsyncThunk(
+  'room/createRoom',
   async (room, thunkAPI) => {
     try {
-      return await roomService.addRoomToDB(room);
+      return await roomService.createRoom(room);
     } catch (error) {
       const message =
         (error.response &&
@@ -78,16 +78,16 @@ const roomSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addRoomToDB.pending, (state) => {
+      .addCase(createRoom.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addRoomToDB.fulfilled, (state, action) => {
+      .addCase(createRoom.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // `action.payload` is a `room` object response from `addRoomToDB API`
+        // `action.payload` is a `room` object response from `createRoom API`
         state.newRoom = { ...action.payload };
       })
-      .addCase(addRoomToDB.rejected, (state, action) => {
+      .addCase(createRoom.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
