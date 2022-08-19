@@ -50,29 +50,29 @@ export function CreateRoom() {
     dispatch(createRoom(data.room));
   };
 
-  useEffect(() => {
-    if (roomState.isError) {
-      console.log(roomState.message);
-    }
-    if (roomState.isSuccess) {
-      // Add room ID to user.roomList
-      const roomList = [...userState.user.roomList];
+  // useEffect(() => {
+  //   if (roomState.isError) {
+  //     console.log(roomState.message);
+  //   }
+  //   if (roomState.isSuccess) {
+  //     // Add room ID to user.roomList
+  //     const roomList = [...userState.user.roomList];
 
-      if (!roomList.includes(roomState.newRoom.id)) {
-        roomList.push(roomState.newRoom.id);
-        dispatch(updateUser({ userID: userState.user.id, roomList }));
-      }
-    }
-    if (userState.isError) {
-      console.log(userState.message);
-    }
-    if (userState.isSuccess) {
-      navigate(`../${roomState.newRoom.id}`);
-    }
-    if (roomState.rooms) console.log('rooms', roomState.rooms);
-    dispatch(roomActions.reset());
-    dispatch(userActions.reset());
-  }, [roomState, userState, navigate, dispatch]);
+  //     if (!roomList.includes(roomState.newRoom.id)) {
+  //       roomList.push(roomState.newRoom.id);
+  //       dispatch(updateUser({ userID: userState.user.id, roomList }));
+  //     }
+  //   }
+  //   if (userState.isError) {
+  //     console.log(userState.message);
+  //   }
+  //   if (userState.isSuccess) {
+  //     navigate(`../${roomState.newRoom.id}`);
+  //   }
+  //   if (roomState.rooms) console.log('rooms', roomState.rooms);
+  //   dispatch(roomActions.reset());
+  //   dispatch(userActions.reset());
+  // }, [roomState, userState, navigate, dispatch]);
 
   return (
     <Form
