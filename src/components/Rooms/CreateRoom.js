@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { roomActions, createRoom } from './roomSlice';
 import { v4 as uuidv4 } from 'uuid';
+import { errorToast } from '../../helpers/messageToast';
 
 const { Option } = Select;
 
@@ -24,7 +25,11 @@ export function CreateRoom() {
 
   const userState = useSelector((state) => state.user);
 
-  const roomState = useSelector((state) => state.room);
+  const {
+    createRoom: { isError, isSuccess },
+    message,
+    newRoom,
+  } = useSelector((state) => state.room);
 
   const onSubmit = (formValues) => {
     const data = {
@@ -49,14 +54,14 @@ export function CreateRoom() {
   };
 
   useEffect(() => {
-    if (roomState.isError) {
-      console.log(roomState.message);
+    if (isError) {
+      errorToast(message);
     }
-    if (roomState.isSuccess) {
-      navigate(`/rooms/${roomState.newRoom.id}`);
+    if (isSuccess) {
+      navigate(`/rooms/${newRoom.id}`);
     }
-    dispatch(roomActions.resetActions());
-  }, [roomState, navigate, dispatch]);
+    dispatch(roomActions.resetActions('createRoom'));
+  }, [navigate, dispatch, newRoom.id, isError, isSuccess, message]);
 
   return (
     <Form

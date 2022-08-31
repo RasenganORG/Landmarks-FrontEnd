@@ -18,24 +18,18 @@ const LayoutPage = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const { rooms, isLoading, isError, isSuccess, message, userHasRooms } =
-    useSelector((state) => state.room);
+  const {
+    rooms,
+    getRoom: { isLoading },
+    userHasRooms,
+  } = useSelector((state) => state.room);
 
   // Run only once
   // Fetch rooms from DB on application start or refresh
   useEffect(() => {
     if (!userHasRooms) dispatch(getRoomsForUser(user.id));
+    dispatch(roomActions.resetActions('getRoom'));
   }, [userHasRooms, dispatch, user.id]);
-
-  useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-    if (isSuccess) {
-      // navigate(`/rooms/${newRoom.id}`);
-    }
-    dispatch(roomActions.resetActions());
-  }, [dispatch, isError, isSuccess, message]);
 
   return (
     <>
