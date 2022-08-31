@@ -3,28 +3,27 @@ import axios from 'axios';
 const API_ROOM = 'http://localhost:8080/api/room/';
 
 // Create 'room' in DB
-const createRoom = async (roomData) => {
-  await axios.post(API_ROOM, roomData, {
+const createRoom = async (data) => {
+  await axios.post(API_ROOM, data.room, {
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  // Returns 'room.id' string
-  return roomData.id;
+  // Returns data{room{}, members[],chat[]}
+  return data;
 };
 
-// Get 'room' by id
-const getRoom = async (roomID) => {
-  const response = await axios.get(`${API_ROOM}${roomID}`);
-
-  // Returns 'room' object
-  return response.data;
+// Create 'room' in DB
+const getRoomsForUser = async (userID) => {
+  const res = await axios.get(`http://localhost:8080/api/${userID}/rooms/`);
+  // Returns roomsArray
+  return res.data;
 };
 
 // update 'room' in DB
-const addUserToRoomMembership = async ({ roomID, userID }) => {
+const addUserToRoomMembership = async ({ roomToken, userID }) => {
   const response = await axios.put(
-    `${API_ROOM}${roomID}`,
+    `${API_ROOM}${roomToken}`,
     { userID },
     {
       headers: {
@@ -38,6 +37,6 @@ const addUserToRoomMembership = async ({ roomID, userID }) => {
   return response.data;
 };
 
-const roomService = { createRoom, addUserToRoomMembership, getRoom };
+const roomService = { createRoom, addUserToRoomMembership, getRoomsForUser };
 
 export default roomService;

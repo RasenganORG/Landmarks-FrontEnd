@@ -33,6 +33,7 @@ export function CreateRoom() {
         id: uuidv4(),
         ownerID: userState.user.id,
         createdOn: new Date().toUTCString(),
+        inviteToken: uuidv4(),
       },
       members: [
         {
@@ -44,8 +45,7 @@ export function CreateRoom() {
       chat: [],
     };
 
-    dispatch(roomActions.addRoom(data));
-    dispatch(createRoom(data.room));
+    dispatch(createRoom(data));
   };
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import ModalUI from './ModalUI';
 import classes from './LayoutPage.module.css';
-import { roomActions } from '../Rooms/roomSlice';
+import { roomActions, getRoomsForUser } from '../Rooms/roomSlice';
 
 import { Layout } from 'antd';
 import Spinner from './Spinner';
@@ -18,35 +18,24 @@ const LayoutPage = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const rooms = useSelector((state) => state.room.rooms);
-  const [loading, setLoading] = useState(false);
+  const { rooms, isLoading, isError, isSuccess, message, userHasRooms } =
+    useSelector((state) => state.room);
 
   // Run only once
   // Fetch rooms from DB on application start or refresh
   useEffect(() => {
-    const getRoomsForUser = async () => {
-      try {
-        // setLoading(true);
-        const response = await fetch(
-          `http://localhost:8080/api/${user.id}/rooms/`
-        );
+    if (!userHasRooms) dispatch(getRoomsForUser(user.id));
+  }, [userHasRooms, dispatch, user.id]);
 
-        if (!response.ok)
-          throw new Error(`${response.status} ${response.statusText}`);
-
-        const roomsArray = await response.json();
-        console.log('getRoomsForUser response', roomsArray);
-        dispatch(roomActions.addMultipleRooms(roomsArray));
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.log(error);
-      }
-    };
-
-    if (rooms.length === 0) getRoomsForUser();
-  }, []);
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+    if (isSuccess) {
+      // navigate(`/rooms/${newRoom.id}`);
+    }
+    dispatch(roomActions.resetActions());
+  }, [dispatch, isError, isSuccess, message]);
 
   return (
     <>
@@ -64,7 +53,7 @@ const LayoutPage = () => {
           <div className={classes.avatar}>
             <p>{user.name}</p>
           </div>
-          <MenuUI classes={classes} rooms={rooms} loading={loading} />
+          <MenuUI classes={classes} rooms={rooms} loading={isLoading} />
         </Sider>
         <Layout className='site-layout'>
           <Content>
@@ -75,7 +64,7 @@ const LayoutPage = () => {
                 width: '100%',
               }}
             >
-              {loading ? (
+              {isLoading ? (
                 <Spinner tip='Starting your next adventure...' />
               ) : (
                 <Outlet />

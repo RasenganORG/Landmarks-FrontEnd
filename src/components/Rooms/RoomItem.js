@@ -49,7 +49,7 @@ export function RoomItem() {
             trigger={'click'}
             mouseLeaveDelay={0}
           >
-            <span>{`Invite Code: ${currentRoom.id}`}</span>
+            <span>{`Invite Code: ${currentRoom.inviteToken}`}</span>
           </Tooltip>
         ) : (
           ''
@@ -87,7 +87,9 @@ export function RoomItem() {
     //   dispatch(drawerActions.closeDrawer());
     // }
     if (key === 'Invite') {
-      navigator.clipboard.writeText(`${window.location.href}/join`);
+      navigator.clipboard.writeText(
+        `http://localhost:3000/rooms/${currentRoom.inviteToken}/join`
+      );
     }
   };
 
