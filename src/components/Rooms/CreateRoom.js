@@ -55,7 +55,7 @@ export function CreateRoom() {
     if (roomState.isSuccess) {
       navigate(`/rooms/${roomState.newRoom.id}`);
     }
-    dispatch(roomActions.reset());
+    dispatch(roomActions.resetActions());
   }, [roomState, navigate, dispatch]);
 
   return (

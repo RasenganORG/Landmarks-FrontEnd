@@ -45,7 +45,7 @@ export default function JoinRoom() {
       }
     }
     // dispatch(userActions.reset());
-    dispatch(roomActions.reset());
+    // dispatch(roomActions.reset());
   }, [userState, dispatch, roomState, navigate]);
 
   return <Spinner tip='Joining room...' />;

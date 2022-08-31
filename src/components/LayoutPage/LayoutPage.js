@@ -61,6 +61,9 @@ const LayoutPage = () => {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className='logo' />
+          <div className={classes.avatar}>
+            <p>{user.name}</p>
+          </div>
           <MenuUI classes={classes} rooms={rooms} loading={loading} />
         </Sider>
         <Layout className='site-layout'>

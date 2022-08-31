@@ -81,7 +81,15 @@ const roomSlice = createSlice({
         ),
       ];
     },
-    reset(state) {
+    resetActions(state) {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = '';
+    },
+    resetAll(state) {
+      state.newRoom = null;
+      state.rooms = [];
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
