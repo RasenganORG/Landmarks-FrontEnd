@@ -21,15 +21,14 @@ const LayoutPage = () => {
   const {
     rooms,
     getRoom: { isLoading },
-    userHasRooms,
   } = useSelector((state) => state.room);
 
   // Run only once
   // Fetch rooms from DB on application start or refresh
   useEffect(() => {
-    if (!userHasRooms) dispatch(getRoomsForUser(user.id));
+    dispatch(getRoomsForUser(user.id));
     dispatch(roomActions.resetActions('getRoom'));
-  }, [userHasRooms, dispatch, user.id]);
+  }, [dispatch, user]);
 
   return (
     <>

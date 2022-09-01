@@ -106,7 +106,6 @@ const roomSlice = createSlice({
         state.getRoom.isLoading = false;
         state.getRoom.isSuccess = true;
         // `action.payload` is a rooms array - eturned by `roomService.getRoomsForUser`
-        console.log('getRoomsForUser response', action.payload);
         state.rooms = [...action.payload];
         state.userHasRooms = true;
       })
@@ -144,8 +143,7 @@ const roomSlice = createSlice({
         state.joinRoom.isLoading = false;
         state.joinRoom.isSuccess = true;
         // `action.payload` is a `room` id returned by `roomService.addUserToRoomMembership`
-        state.rooms.push(action.payload);
-        state.newRoom = { ...action.payload };
+        state.newRoom = { id: action.payload.id };
       })
       .addCase(addUserToRoomMembership.rejected, (state, action) => {
         state.joinRoom.isLoading = false;

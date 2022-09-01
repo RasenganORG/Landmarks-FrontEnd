@@ -61,7 +61,7 @@ export function CreateRoom() {
       navigate(`/rooms/${newRoom.id}`);
     }
     dispatch(roomActions.resetActions('createRoom'));
-  }, [navigate, dispatch, newRoom.id, isError, isSuccess, message]);
+  }, [navigate, dispatch, newRoom, isError, isSuccess, message]);
 
   return (
     <Form
