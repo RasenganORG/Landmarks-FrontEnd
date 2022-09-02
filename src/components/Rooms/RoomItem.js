@@ -7,10 +7,13 @@ import DrawerUI from './Drawers/DrawerUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { drawerActions } from './Drawers/drawerSlice';
+import { useEffect } from 'react';
 
 export function RoomItem() {
   const { roomID } = useParams();
   const dispatch = useDispatch();
+
+  console.log('Do I get renderd ?');
 
   const currentRoom = useSelector((state) =>
     state.room.rooms?.find((room) => room.id === roomID)
@@ -51,7 +54,7 @@ export function RoomItem() {
               trigger={'click'}
               mouseLeaveDelay={0}
             >
-              <span>{`Invite Code: ${currentRoom.id}`}</span>
+              <span>{`Invite Code: ${currentRoom.inviteToken}`}</span>
             </Tooltip>
           ),
         }
@@ -113,7 +116,7 @@ export function RoomItem() {
       <Content>
         <div className={classes['map-container']}></div>
       </Content>
-      <DrawerUI />
+      <DrawerUI room={currentRoom} userID={userID} />
     </Layout>
   );
 }
