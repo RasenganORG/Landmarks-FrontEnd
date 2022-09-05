@@ -1,12 +1,11 @@
 import { Menu } from 'antd';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PlusSquareOutlined, LogoutOutlined } from '@ant-design/icons';
 
 import { modalActions } from './modalSlice';
 import Spinner from './Spinner';
-import { roomActions } from '../Rooms/roomSlice';
 
 function getItem(label, key, icon, path, children) {
   return {
@@ -24,52 +23,36 @@ const menuItems = [
   getItem('Create Room', 'createRoom', <PlusSquareOutlined />, '/rooms/new'),
 ];
 
-export default function MenuUI({ current, setCurrent, classes, isLoading }) {
-  const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function MenuUI({ classes, rooms, loading }) {
+  const [menuRooms, setMenuRooms] = useState([]);
+  const [current, setCurrent] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
 
   const currentPath = location.pathname;
 
+  // Change menu based on store rooms
   useEffect(() => {
-    const getRooms = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/${user.id}/rooms/`
-      );
-      // Check if the user is part of any room
-      if (response.status === 204) {
-        setRooms([]);
-        setLoading(false);
-        return;
-      }
-
-      const data = await response.json();
-      dispatch(roomActions.setRooms(data));
-
-      setRooms([
-        ...data
-          .sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
-          .map((room) =>
-            getItem(`${room.name}`, `${room.id}`, null, `/rooms/${room.id}`)
-          ),
-      ]);
-      setLoading(false);
-    };
-    setTimeout(getRooms, 1000);
-  }, [user, dispatch]);
+    const foo = [...rooms];
+    setMenuRooms([
+      ...foo
+        .sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
+        .map((room) =>
+          getItem(`${room.name}`, `${room.id}`, null, `/rooms/${room.id}`)
+        ),
+    ]);
+  }, [rooms]);
 
   useEffect(() => {
     // If a menu item path correspons with the current url path,
     // then set that menu item to active
-    const menus = [...menuItems, ...rooms];
+    const menus = [...menuItems, ...menuRooms];
     menus.forEach((item) => {
       if (item.path === currentPath) setCurrent(item.key);
     });
-  }, [currentPath, rooms, setCurrent]);
+  }, [currentPath, menuRooms, setCurrent]);
 
   const onClickRooms = (e) => {
     // Set current active menu item
@@ -96,7 +79,7 @@ export default function MenuUI({ current, setCurrent, classes, isLoading }) {
       />
       <br />
       <br />
-      {isLoading || loading ? (
+      {loading ? (
         <div className={classes['spin-container']}>
           <Spinner size={36} />
         </div>
@@ -105,7 +88,7 @@ export default function MenuUI({ current, setCurrent, classes, isLoading }) {
           theme='dark'
           selectedKeys={[current]}
           mode='inline'
-          items={rooms}
+          items={menuRooms}
           onClick={onClickRooms}
         />
       )}

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import ModalUI from './ModalUI';
 import classes from './LayoutPage.module.css';
+import { roomActions, getRoomsForUser } from '../Rooms/roomSlice';
 
 import { Layout } from 'antd';
 import Spinner from './Spinner';
@@ -13,11 +15,20 @@ const { Content, Sider } = Layout;
 
 const LayoutPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [current, setCurrent] = useState('');
 
-  const userState = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const {
+    rooms,
+    getRoom: { isLoading },
+  } = useSelector((state) => state.room);
 
-  const roomState = useSelector((state) => state.room);
+  // Run only once
+  // Fetch rooms from DB on application start or refresh
+  useEffect(() => {
+    dispatch(getRoomsForUser(user.id));
+    dispatch(roomActions.resetActions('getRoom'));
+  }, [dispatch, user]);
 
   return (
     <>
@@ -32,12 +43,10 @@ const LayoutPage = () => {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className='logo' />
-          <MenuUI
-            current={current}
-            setCurrent={setCurrent}
-            classes={classes}
-            isLoading={roomState.isLoading || userState.isLoading}
-          />
+          <div className={classes.avatar}>
+            <p>{user.name}</p>
+          </div>
+          <MenuUI classes={classes} rooms={rooms} loading={isLoading} />
         </Sider>
         <Layout className='site-layout'>
           <Content>
@@ -48,7 +57,7 @@ const LayoutPage = () => {
                 width: '100%',
               }}
             >
-              {roomState.isLoading || userState.isLoading ? (
+              {isLoading ? (
                 <Spinner tip='Starting your next adventure...' />
               ) : (
                 <Outlet />

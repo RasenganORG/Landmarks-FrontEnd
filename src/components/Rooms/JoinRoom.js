@@ -1,49 +1,47 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateUser } from '../Authenticate/userSlice';
-import { getRoom, roomActions, updateRoom } from './roomSlice';
+import {
+  roomActions,
+  addUserToRoomMembership,
+  getRoomsForUser,
+} from './roomSlice';
 import Spinner from '../LayoutPage/Spinner';
+import { errorToast } from '../../helpers/messageToast';
 
 export default function JoinRoom() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { roomID } = useParams();
-  const userState = useSelector((state) => state.user);
-  const roomState = useSelector((state) => state.room);
+  const { inviteToken } = useParams();
+
+  const {
+    rooms,
+    joinRoom: { isError, isSuccess },
+    message,
+    newRoom,
+  } = useSelector((state) => state.room);
+  const userID = useSelector((state) => state.user.user.id);
+  const room = rooms.find((room) => room.inviteToken === inviteToken);
 
   useEffect(() => {
-    if (userState.user.roomList.some((id) => id === roomID))
-      navigate(`/rooms/${roomID}`);
-    else {
-      dispatch(getRoom(roomID));
+    if (room) {
+      navigate(`/rooms/${room.id}`);
+    } else {
+      dispatch(addUserToRoomMembership({ roomToken: inviteToken, userID }));
     }
-  }, [dispatch, roomID, navigate, userState]);
+  }, [room, inviteToken, navigate, dispatch, userID]);
 
   useEffect(() => {
-    if (roomState.isError) {
-      console.log(roomState.message);
+    if (isError) {
+      navigate(`/rooms/`);
+      errorToast(message);
     }
-    if (roomState.isSuccess) {
-      const userRooms = [...userState.user.roomList];
-      const roomMembers = [...roomState.newRoom.members];
-
-      if (!userRooms.includes(roomState.newRoom.id)) {
-        // Add room ID to user.roomList
-        userRooms.push(roomState.newRoom.id);
-        // Add user ID to room.members
-        roomMembers.push(userState.user.id);
-        dispatch(
-          updateUser({ userID: userState.user.id, roomList: userRooms })
-        );
-        dispatch(
-          updateRoom({ roomID: roomState.newRoom.id, members: roomMembers })
-        );
-      }
+    if (newRoom && isSuccess) {
+      dispatch(getRoomsForUser(userID));
+      navigate(`/rooms/${newRoom.id}`, { replace: true });
     }
-    // dispatch(userActions.reset());
-    dispatch(roomActions.reset());
-  }, [userState, dispatch, roomState, navigate]);
+    dispatch(roomActions.resetActions('joinRoom'));
+  }, [dispatch, navigate, isError, isSuccess, message, newRoom, userID]);
 
   return <Spinner tip='Joining room...' />;
 }

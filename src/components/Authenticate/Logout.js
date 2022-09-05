@@ -4,6 +4,7 @@ import { logout, userActions } from './userSlice';
 
 import { Button, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { roomActions } from '../Rooms/roomSlice';
 
 export default function Logout() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function Logout() {
   const onLogout = () => {
     dispatch(logout());
     dispatch(userActions.reset());
+    dispatch(roomActions.resetAll());
     dispatch(modalActions.closeModal());
     navigate('/');
   };
