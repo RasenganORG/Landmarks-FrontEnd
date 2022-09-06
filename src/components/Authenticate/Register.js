@@ -1,52 +1,16 @@
-import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { userActions, register } from './userSlice';
-import { successToast, errorToast } from '../../helpers/messageToast';
 
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Row, Col } from 'antd';
-import Spinner from '../LayoutPage/Spinner';
 
 export default function Register() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  const {
-    user,
-    isLoading,
-    isSuccess,
-    isError,
-    message: authStateMessage,
-  } = useSelector((state) => state.user);
-
   const onFinish = (values) => {
-    const userData = { ...values.user };
-    dispatch(register(userData));
+    const userData = { ...values };
+    navigate('/set-avatar', { state: userData });
   };
-
-  useEffect(() => {
-    if (isError) {
-      errorToast(authStateMessage);
-    }
-    if (isSuccess) {
-      navigate('/');
-      successToast(`Welcome, ${authStateMessage}`);
-    }
-    if (user) {
-      navigate('/');
-    }
-
-    dispatch(userActions.reset());
-  }, [user, isError, isSuccess, authStateMessage, navigate, dispatch]);
-
-  if (isLoading)
-    return (
-      <div className='spin-container'>
-        <Spinner tip='Getting everything ready for you...' />
-      </div>
-    );
 
   return (
     <Row align='middle' style={{ height: '100vh' }}>
@@ -61,7 +25,7 @@ export default function Register() {
           preserve={true}
         >
           <Form.Item
-            name={['user', 'name']}
+            name='name'
             rules={[
               {
                 required: true,
@@ -76,7 +40,7 @@ export default function Register() {
             />
           </Form.Item>
           <Form.Item
-            name={['user', 'email']}
+            name='email'
             rules={[
               {
                 required: true,
@@ -92,7 +56,7 @@ export default function Register() {
             />
           </Form.Item>
           <Form.Item
-            name={['user', 'password']}
+            name='password'
             rules={[
               {
                 required: true,

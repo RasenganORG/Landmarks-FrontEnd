@@ -7,7 +7,6 @@ import DrawerUI from './Drawers/DrawerUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { drawerActions } from './Drawers/drawerSlice';
-import { useEffect } from 'react';
 
 export function RoomItem() {
   const { roomID } = useParams();
