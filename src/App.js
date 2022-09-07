@@ -10,6 +10,7 @@ import Register from './components/Authenticate/Register';
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/Authenticate/PrivateRoute';
 import JoinRoom from './components/Rooms/JoinRoom';
+import SetAvatar from './components/Authenticate/SetAvatar';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
 
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
+        <Route path='set-avatar' element={<SetAvatar />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>

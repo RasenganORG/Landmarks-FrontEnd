@@ -23,7 +23,7 @@ export default function Login() {
   } = useSelector((state) => state.user);
 
   const onFinish = (values) => {
-    const userData = { ...values.user };
+    const userData = { ...values };
     dispatch(login(userData));
   };
 
@@ -61,7 +61,7 @@ export default function Login() {
           preserve
         >
           <Form.Item
-            name={['user', 'email']}
+            name='email'
             rules={[
               {
                 required: true,
@@ -77,7 +77,7 @@ export default function Login() {
             />
           </Form.Item>
           <Form.Item
-            name={['user', 'password']}
+            name='password'
             rules={[
               {
                 required: true,

@@ -23,7 +23,13 @@ const menuItems = [
   getItem('Create Room', 'createRoom', <PlusSquareOutlined />, '/rooms/new'),
 ];
 
-export default function MenuUI({ classes, rooms, loading }) {
+export default function MenuUI({
+  classes,
+  rooms,
+  loading,
+  avatarClicked,
+  setAvatarClicked,
+}) {
   const [menuRooms, setMenuRooms] = useState([]);
   const [current, setCurrent] = useState('');
 
@@ -32,6 +38,10 @@ export default function MenuUI({ classes, rooms, loading }) {
   const dispatch = useDispatch();
 
   const currentPath = location.pathname;
+
+  useEffect(() => {
+    if (avatarClicked) setCurrent('');
+  }, [avatarClicked]);
 
   // Change menu based on store rooms
   useEffect(() => {
@@ -56,6 +66,7 @@ export default function MenuUI({ classes, rooms, loading }) {
 
   const onClickRooms = (e) => {
     // Set current active menu item
+    setAvatarClicked(false);
     if (e.key === 'createRoom') {
       navigate('rooms/new');
       return;
