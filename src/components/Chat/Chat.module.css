@@ -1,0 +1,117 @@
+.chat-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 30px 15px;
+  gap: 30px;
+  overflow: auto;
+}
+
+.chat-wrapper .chat-body {
+  width: 100%;
+  flex: 11;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.chat-wrapper .chat-form {
+  width: 100%;
+  height: 60px;
+  flex-grow: 0.1;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.chat-wrapper .chat-form .chat-input {
+  width: 80%;
+  border-radius: 10px;
+}
+.chat-wrapper .chat-form .chat-send {
+  border: 0;
+  background-color: red;
+}
+
+.chat-wrapper .chat-body .message-wrapper {
+  position: relative;
+  background: #00aabb;
+  border-radius: 0.4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 300px;
+  min-width: 150px;
+  padding: 10px;
+}
+
+.chat-wrapper .chat-body .message-wrapper::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 15px solid transparent;
+}
+
+.chat-wrapper .chat-body .pinned {
+  align-self: center;
+}
+
+.chat-wrapper .chat-body .pinned::after {
+  top: 0;
+  left: 50%;
+  border-bottom-color: #00aabb;
+  border-top: 0;
+  margin-left: -15px;
+  margin-top: -15px;
+}
+.chat-wrapper .chat-body .left {
+  align-self: flex-start;
+}
+
+.chat-wrapper .chat-body .left::after {
+  left: 0;
+  top: 50%;
+  border-right-color: #00aabb;
+  border-left: 0;
+  margin-top: -15px;
+  margin-left: -15px;
+}
+.chat-wrapper .chat-body .right {
+  align-self: flex-end;
+  flex-direction: column;
+}
+.chat-wrapper .chat-body .right::after {
+  right: 0;
+  top: 50%;
+  border-left-color: #00aabb;
+  border-right: 0;
+  margin-top: -15px;
+  margin-right: -15px;
+}
+
+.chat-wrapper .chat-body .message-wrapper .message-body {
+  display: flex;
+  justify-content: space-between;
+}
+.chat-wrapper .chat-body .message-wrapper .message-info {
+  display: flex;
+  /* justify-content: space-between; */
+}
+
+.chat-wrapper .chat-body .message-wrapper .message-body .message-text {
+  width: 80%;
+  word-wrap: break-word;
+  background-color: #fff;
+}
+
+.chat-wrapper .chat-body .message-wrapper .message-info .message-owner {
+  flex: 1;
+  align-self: flex-start;
+  text-align: start;
+}
+.chat-wrapper .chat-body .message-wrapper .message-info .timepstamp {
+  flex: 1;
+  align-self: flex-end;
+  text-align: end;
+}

@@ -31,7 +31,7 @@ export default function DrawerUI({
     <Drawer
       title={currentDrawer}
       placement={'right'}
-      width={300}
+      width={400}
       onClose={onDrawerCloseHandler}
       visible={visible}
       closeIcon={<RightOutlined />}
