@@ -24,4 +24,9 @@
 .avatar {
   color: white;
   text-align: center;
+  margin: 20px 0;
+}
+
+.avatar:hover {
+  cursor: pointer;
 }

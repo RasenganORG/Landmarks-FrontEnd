@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const API_GET_LOGGED_USER = 'http://localhost:8080/api/getLoggedUser/';
 const API_USER = 'http://localhost:8080/api/user/';
+const API_REGISTER = 'http://localhost:8080/api/register/';
+const API_LOGIN = 'http://localhost:8080/api/login/';
 
 const register = async (userData) => {
-  const response = await axios.post(API_USER, userData, {
+  const response = await axios.post(API_REGISTER, userData, {
     headers: {
       // Overwrite Axios's automatically set Content-Type
       'Content-Type': 'application/json',
@@ -18,9 +19,12 @@ const register = async (userData) => {
 };
 
 const login = async (userData) => {
-  const response = await axios.get(
-    `${API_GET_LOGGED_USER}${userData.email}/?pwd=${userData.password}`
-  );
+  const response = await axios.post(API_LOGIN, userData, {
+    headers: {
+      // Overwrite Axios's automatically set Content-Type
+      'Content-Type': 'application/json',
+    },
+  });
 
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data));
