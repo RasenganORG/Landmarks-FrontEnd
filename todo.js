@@ -1,4 +1,4 @@
-// chatID de forma: 'roomiD_ownerID' sau 'userID_userID' aranjat in ordine lexicografica
+// chatID de forma: 'roomID_ownerID' sau 'userID_userID' aranjat in ordine lexicografica
 
 export const chat = {
   room: {

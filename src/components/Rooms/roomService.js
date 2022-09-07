@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_ROOM = 'http://localhost:8080/api/room/';
+const API_ROOM = 'http://localhost:8080/api/rooms/room/';
 
 // Create 'room' in DB
 const createRoom = async (data) => {
