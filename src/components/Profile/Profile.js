@@ -1,5 +1,7 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function Profile() {
-  return <div>Profile</div>;
+  const { state } = useLocation();
+  return <div>User ID: {state}</div>;
 }

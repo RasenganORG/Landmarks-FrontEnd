@@ -37,14 +37,16 @@ export default function SetAvatar() {
             Math.random() * 10000
           )}?apikey=e6zKM2AxYihuBa`
         );
+        // Get SVG image from Multiavatar API
         const svg = await res.text();
+        // Encode it in base64 to be later saved in database
         const encoded64 = Buffer.from(svg).toString('base64');
-        // const decoded64 = Buffer.from(encoded64, 'base64').toString();
-
+        // Create new icon for ANTD Icon component
         const newSVG = () => <SVG src={svg} />;
         const newIcon = (props) => <Icon component={newSVG} {...props} />;
 
         avatar[`avatar${i}`] = { svg64: encoded64, icon: newIcon };
+        // Push object {svg64, icon}
         data.push(avatar[`avatar${i}`]);
       }
       setAvatars(data);

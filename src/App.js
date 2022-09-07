@@ -31,7 +31,7 @@ function App() {
             <Route path=':roomID/edit' element={<EditRoom />} />
             <Route path=':inviteToken/join' element={<JoinRoom />} />
           </Route>
-          <Route path='profile/:id' element={<Profile />} />
+          <Route path='profile/:name' element={<Profile />} />
         </Route>
 
         <Route path='login' element={<Login />} />
