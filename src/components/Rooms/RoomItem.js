@@ -87,7 +87,7 @@ export function RoomItem() {
 
     if (key === 'Invite') {
       navigator.clipboard.writeText(
-        `http://localhost:3000/rooms/${currentRoom.inviteToken}/join`
+        `http://localhost:3000/rooms/join/${currentRoom.inviteToken}`
       );
     }
   };

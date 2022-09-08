@@ -29,7 +29,7 @@ function App() {
             <Route path='new' element={<CreateRoom />} />
             <Route path=':roomID' element={<RoomItem />} />
             <Route path=':roomID/edit' element={<EditRoom />} />
-            <Route path=':inviteToken/join' element={<JoinRoom />} />
+            <Route path='join/:inviteToken/' element={<JoinRoom />} />
           </Route>
           <Route path='profile/:id' element={<Profile />} />
         </Route>

@@ -2,17 +2,43 @@ import { SendOutlined } from '@ant-design/icons';
 import { Avatar, Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import classes from './Chat.module.css';
-import { addMessage } from './chatSlice';
+import { addMessage, chatActions } from './chatSlice';
 import Spinner from '../LayoutPage/Spinner';
 import AvatarIcon from '../../helpers/AvatarIcon';
 import { useRef } from 'react';
 import { useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { useState } from 'react';
 
 export default function Chat({ chatID, currentUserID, members }) {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.chat);
   const [form] = Form.useForm();
   const scrollRef = useRef();
+  const socket = useRef();
+  const [newMessage, setNewMessage] = useState(null);
+
+  useEffect(() => {
+    socket.current = io('ws://localhost:8080');
+  }, []);
+
+  useEffect(() => {
+    socket.current.emit('addUser', currentUserID);
+    socket.current.on('getUsers', (users) => {
+      console.log(users);
+    });
+    socket.current.on('getMessage', (message) => {
+      setNewMessage(message);
+    });
+  }, [currentUserID]);
+
+  useEffect(() => {
+    newMessage && dispatch(chatActions.addMessage(newMessage));
+  }, [newMessage, dispatch]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const onSend = (values) => {
     const message = {
@@ -20,14 +46,11 @@ export default function Chat({ chatID, currentUserID, members }) {
       timestamp: new Date().toUTCString(),
       sentBy: currentUserID,
     };
-    console.log(message);
+
+    socket.current.emit('sendMessage', message);
     dispatch(addMessage({ message, chatID }));
     form.resetFields();
   };
-
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
 
   if (!messages) return <Spinner tip='Fetching messages...' />;
 
