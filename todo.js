@@ -10,19 +10,19 @@ export const chat = {
     ownerID: 'htmXJ9bUu3es3jXhDkHf',
     name: 'Aaaaa',
     map: 'None',
-    chat: 'chatID',
+    chatID: 'chatID',
     members: [],
   },
   chats: {
     chatID: {
       messages: [
         {
-          sentAt: '',
+          timestamp: '',
           sentBy: '',
           messageText: '',
         },
         {
-          sentAt: '',
+          timestamp: '',
           sentBy: '',
           messageText: '',
         },

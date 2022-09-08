@@ -47,8 +47,9 @@ export function CreateRoom() {
           avatar: userState.user.avatar ? userState.user.avatar : null,
         },
       ],
-      chat: [],
     };
+
+    data.room.chatID = `${data.room.id}_${data.room.ownerID}`;
 
     dispatch(createRoom(data));
   };

@@ -20,7 +20,6 @@ const initialState = {
     isLoading: false,
   },
   message: '',
-  userHasRooms: false,
 };
 
 export const createRoom = createAsyncThunk(
@@ -94,7 +93,6 @@ const roomSlice = createSlice({
         state.joinRoom[foo] = false;
       }
       state.message = '';
-      state.userHasRooms = false;
     },
   },
   extraReducers: (builder) => {
@@ -106,14 +104,13 @@ const roomSlice = createSlice({
         state.getRoom.isLoading = false;
         state.getRoom.isSuccess = true;
         // `action.payload` is a rooms array - eturned by `roomService.getRoomsForUser`
+        console.log(...action.payload);
         state.rooms = [...action.payload];
-        state.userHasRooms = true;
       })
       .addCase(getRoomsForUser.rejected, (state, action) => {
         state.getRoom.isLoading = false;
         state.getRoom.isError = true;
         state.message = action.payload;
-        state.userHasRooms = false;
       })
       .addCase(createRoom.pending, (state) => {
         state.createRoom.isLoading = true;
@@ -121,15 +118,13 @@ const roomSlice = createSlice({
       .addCase(createRoom.fulfilled, (state, action) => {
         state.createRoom.isLoading = false;
         state.createRoom.isSuccess = true;
-        // `action.payload` is data{ room{}, members[], chat[] } - eturned by `roomService.createRoom`
+        // `action.payload` is data{ room{}, members[], messages[] } - eturned by `roomService.createRoom`
         const newRoom = {
           ...action.payload.room,
           members: [...action.payload.members],
-          chat: [...action.payload.chat],
         };
         state.rooms.push(newRoom);
         state.newRoom = { id: newRoom.id };
-        state.userHasRooms = true;
       })
       .addCase(createRoom.rejected, (state, action) => {
         state.createRoom.isLoading = false;

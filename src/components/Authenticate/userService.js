@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_USER = 'http://localhost:8080/api/users/user/';
+const API_UPDATE_USER = 'http://localhost:8080/api/users/update/';
+
 const API_REGISTER = 'http://localhost:8080/api/auth/register/';
 const API_LOGIN = 'http://localhost:8080/api/auth/login/';
 
@@ -39,7 +40,7 @@ const logout = async () => {
 // update User in DB
 const updateUser = async ({ userID, roomList }) => {
   const response = await axios.put(
-    `${API_USER}${userID}`,
+    `${API_UPDATE_USER}${userID}`,
     { roomList },
     {
       headers: {
