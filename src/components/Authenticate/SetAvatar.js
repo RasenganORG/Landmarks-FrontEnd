@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import Icon from '@ant-design/icons';
 import { Button } from 'antd';
-import SVG from 'react-inlinesvg';
 import Spinner from '../LayoutPage/Spinner';
 import { Buffer } from 'buffer';
 import { useLocation, useNavigate } from 'react-router-dom';

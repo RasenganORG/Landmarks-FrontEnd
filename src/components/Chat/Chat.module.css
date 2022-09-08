@@ -3,9 +3,10 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 15px 15px 30px 15px;
+  padding: 15px 0;
   gap: 30px;
   overflow: auto;
+  overflow: hidden;
 }
 
 .chat-wrapper .chat-body {
@@ -14,6 +15,8 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  padding: 0 15px;
+  overflow-y: scroll;
 }
 .chat-wrapper .chat-form {
   width: 100%;
@@ -26,7 +29,6 @@
 
 .chat-wrapper .chat-form .chat-input {
   width: 80%;
-  border-radius: 10px;
 }
 .chat-wrapper .chat-form .chat-send {
   border: 0;
@@ -93,14 +95,20 @@
 .chat-wrapper .chat-body .message-wrapper .message-body {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 .chat-wrapper .chat-body .message-wrapper .message-info {
   display: flex;
   /* justify-content: space-between; */
 }
 
+.chat-wrapper .chat-body .message-wrapper .message-body .avatar {
+  flex: 1;
+}
+
 .chat-wrapper .chat-body .message-wrapper .message-body .message-text {
-  width: 80%;
+  max-width: 80%;
+  flex: 3;
   word-wrap: break-word;
   background-color: #fff;
 }

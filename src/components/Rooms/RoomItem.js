@@ -7,6 +7,8 @@ import DrawerUI from './Drawers/DrawerUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { drawerActions } from './Drawers/drawerSlice';
+import { useEffect } from 'react';
+import { chatActions, getMessages } from '../Chat/chatSlice';
 
 export function RoomItem() {
   const { roomID } = useParams();
@@ -16,10 +18,17 @@ export function RoomItem() {
     state.room.rooms?.find((room) => room.id === roomID)
   );
 
-  const userID = useSelector((state) => state.user.user.id);
+  useEffect(() => {
+    if (currentRoom) {
+      dispatch(getMessages(currentRoom.chatID));
+      dispatch(chatActions.reset());
+    }
+  }, [currentRoom, dispatch]);
+
+  const currentUserID = useSelector((state) => state.user.user.id);
   const currentDrawer = useSelector((state) => state.drawer.currentDrawer);
 
-  if (!currentRoom) return <Spinner tip='Room does not exist...' />;
+  if (!currentRoom) return <Spinner tip='Searching for room...' />;
 
   const roomNavItems = [
     {
@@ -42,7 +51,7 @@ export function RoomItem() {
       key: 'Edit',
       label: 'Edit',
     },
-    userID === currentRoom.ownerID
+    currentUserID === currentRoom.ownerID
       ? {
           key: 'Invite',
           label: (
@@ -113,7 +122,7 @@ export function RoomItem() {
       <Content>
         <div className={classes['map-container']}></div>
       </Content>
-      <DrawerUI room={currentRoom} userID={userID} />
+      <DrawerUI room={currentRoom} currentUserID={currentUserID} />
     </Layout>
   );
 }

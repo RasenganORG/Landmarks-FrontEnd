@@ -104,7 +104,6 @@ const roomSlice = createSlice({
         state.getRoom.isLoading = false;
         state.getRoom.isSuccess = true;
         // `action.payload` is a rooms array - eturned by `roomService.getRoomsForUser`
-        console.log(...action.payload);
         state.rooms = [...action.payload];
       })
       .addCase(getRoomsForUser.rejected, (state, action) => {
