@@ -1,3 +1,14 @@
 .current-user {
   background-color: #d3d3d3;
 }
+
+.offline-users {
+  opacity: 0.5;
+}
+
+.status {
+  width: 10px;
+  height: 10px;
+  background: green;
+  border-radius: 50%;
+}

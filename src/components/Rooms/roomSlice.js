@@ -4,6 +4,8 @@ import roomService from './roomService';
 const initialState = {
   newRoom: null,
   rooms: [],
+  onlineUsers: [],
+  currentChat: '',
   getRoom: {
     isError: false,
     isSuccess: false,
@@ -93,6 +95,13 @@ const roomSlice = createSlice({
         state.joinRoom[foo] = false;
       }
       state.message = '';
+    },
+    setOnlineUsers(state, action) {
+      console.log(action.payload);
+      state.onlineUsers = [...action.payload];
+    },
+    setCurrentChat(state, action) {
+      state.currentChat = action.payload;
     },
   },
   extraReducers: (builder) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'antd';
-import Spinner from '../LayoutPage/Spinner';
+import Spinner from '../Home/Spinner';
 import { Buffer } from 'buffer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

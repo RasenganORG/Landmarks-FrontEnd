@@ -30,6 +30,7 @@ export default function DrawerUI({
         members={members}
         ownerID={ownerID}
         currentUserID={currentUserID}
+        chatID={chatID}
       />
     );
 

@@ -3,37 +3,31 @@ import { Avatar, Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import classes from './Chat.module.css';
 import { addMessage, chatActions } from './chatSlice';
-import Spinner from '../LayoutPage/Spinner';
+import Spinner from '../Home/Spinner';
 import AvatarIcon from '../../helpers/AvatarIcon';
 import { useRef } from 'react';
 import { useEffect } from 'react';
-import { io } from 'socket.io-client';
 import { useState } from 'react';
+import socket from '../SocketIO/socket';
 
 export default function Chat({ chatID, currentUserID, members }) {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.chat);
   const [form] = Form.useForm();
   const scrollRef = useRef();
-  const socket = useRef();
   const [newMessage, setNewMessage] = useState(null);
 
   useEffect(() => {
-    socket.current = io('ws://localhost:8080');
-  }, []);
-
-  useEffect(() => {
-    socket.current.emit('addUser', currentUserID);
-    socket.current.on('getUsers', (users) => {
-      console.log(users);
-    });
-    socket.current.on('getMessage', (message) => {
+    socket.on('getMessage', (message) => {
+      console.log('message', message);
       setNewMessage(message);
     });
-  }, [currentUserID]);
+  }, [newMessage]);
 
   useEffect(() => {
-    newMessage && dispatch(chatActions.addMessage(newMessage));
+    newMessage &&
+      dispatch(chatActions.addMessage(newMessage)) &&
+      console.log('newMessage', newMessage);
   }, [newMessage, dispatch]);
 
   useEffect(() => {
@@ -47,7 +41,7 @@ export default function Chat({ chatID, currentUserID, members }) {
       sentBy: currentUserID,
     };
 
-    socket.current.emit('sendMessage', message);
+    socket.emit('sendMessage', message);
     dispatch(addMessage({ message, chatID }));
     form.resetFields();
   };
@@ -73,14 +67,14 @@ export default function Chat({ chatID, currentUserID, members }) {
                 <div className='avatar'>
                   <Avatar
                     size='large'
-                    icon={
-                      <AvatarIcon
-                        svg64={
-                          members.find((user) => user.id === message.sentBy)
-                            .avatar
-                        }
-                      />
-                    }
+                    // icon={
+                    //   <AvatarIcon
+                    //     svg64={
+                    //       members.find((user) => user.id === message.sentBy)
+                    //         ?.avatar
+                    //     }
+                    //   />
+                    // }
                   />
                 </div>
                 <div className={classes['message-text']}>
@@ -89,7 +83,7 @@ export default function Chat({ chatID, currentUserID, members }) {
               </div>
               <div className={classes['message-info']}>
                 <div className={classes['message-owner']}>
-                  {members.find((user) => user.id === message.sentBy).name}
+                  {members.find((user) => user.id === message.sentBy)?.name}
                 </div>
                 <div className={classes['timepstamp']}>{message.timestamp}</div>
               </div>
