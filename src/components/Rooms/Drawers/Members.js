@@ -6,7 +6,7 @@ import socket from '../../SocketIO/socket';
 import { roomActions } from '../roomSlice';
 import classes from './Members.module.css';
 
-export default function Members({ members, ownerID, currentUserID, chatID }) {
+export default function Members({ members, ownerID, currentUserID, chatId }) {
   const { onlineUsers } = useSelector((state) => state.room);
   const [online, setOnline] = useState([]);
   const [offline, setOffline] = useState([]);
@@ -29,7 +29,7 @@ export default function Members({ members, ownerID, currentUserID, chatID }) {
         return onlineUsers.every((foo) => foo.id !== el.id);
       })
     );
-  }, [onlineUsers, members, chatID]);
+  }, [onlineUsers, members, chatId]);
 
   // console.log('online', online);
   // console.log('offline', offline);

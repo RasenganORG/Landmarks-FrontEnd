@@ -1,4 +1,4 @@
-// chatID de forma: 'roomID_ownerID' sau 'userID_userID' aranjat in ordine lexicografica
+// chatId de forma: 'roomID_ownerID' sau 'userID_userID' aranjat in ordine lexicografica
 
 export const chat = {
   room: {
@@ -10,11 +10,11 @@ export const chat = {
     ownerID: 'htmXJ9bUu3es3jXhDkHf',
     name: 'Aaaaa',
     map: 'None',
-    chatID: 'chatID',
+    chatId: 'chatId',
     members: [],
   },
   chats: {
-    chatID: {
+    chatId: {
       messages: [
         {
           timestamp: '',

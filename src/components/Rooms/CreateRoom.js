@@ -49,7 +49,7 @@ export function CreateRoom() {
       ],
     };
 
-    data.room.chatID = `${data.room.id}_${data.room.ownerID}`;
+    data.room.chatId = `${data.room.id}_${data.room.ownerID}`;
 
     dispatch(createRoom(data));
   };

@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import socket from '../SocketIO/socket';
 
-export default function Chat({ chatID, currentUserID, members }) {
+export default function Chat({ chatId, currentUserID, members }) {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.chat);
   const [form] = Form.useForm();
@@ -19,13 +19,15 @@ export default function Chat({ chatID, currentUserID, members }) {
 
   useEffect(() => {
     socket.on('getMessage', (message) => {
-      console.log('message', message);
+      console.log('getMessage from other users', message);
       setNewMessage(message);
     });
-  }, [newMessage]);
+  }, [chatId]);
 
   useEffect(() => {
+    console.log('chatId', chatId);
     newMessage &&
+      newMessage.chatId === chatId &&
       dispatch(chatActions.addMessage(newMessage)) &&
       console.log('newMessage', newMessage);
   }, [newMessage, dispatch]);
@@ -39,10 +41,12 @@ export default function Chat({ chatID, currentUserID, members }) {
       messageText: values.message,
       timestamp: new Date().toUTCString(),
       sentBy: currentUserID,
+      chatId,
     };
 
     socket.emit('sendMessage', message);
-    dispatch(addMessage({ message, chatID }));
+    console.log('send message to socket', message);
+    dispatch(addMessage({ message, chatId }));
     form.resetFields();
   };
 

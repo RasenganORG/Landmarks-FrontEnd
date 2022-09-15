@@ -8,7 +8,7 @@ import Chat from '../../Chat/Chat';
 import Members from './Members';
 
 export default function DrawerUI({
-  room: { members, id, ownerID, chatID },
+  room: { members, ownerID, chatId },
   currentUserID,
 }) {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export default function DrawerUI({
   let whichDrawer = null;
   if (currentDrawer === 'Chat')
     whichDrawer = (
-      <Chat members={members} chatID={chatID} currentUserID={currentUserID} />
+      <Chat members={members} chatId={chatId} currentUserID={currentUserID} />
     );
   if (currentDrawer === 'Members')
     whichDrawer = (
@@ -30,7 +30,7 @@ export default function DrawerUI({
         members={members}
         ownerID={ownerID}
         currentUserID={currentUserID}
-        chatID={chatID}
+        chatId={chatId}
       />
     );
 

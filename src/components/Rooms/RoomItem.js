@@ -25,8 +25,8 @@ export function RoomItem() {
 
   useEffect(() => {
     if (currentRoom) {
-      dispatch(getMessages(currentRoom.chatID));
-      dispatch(roomActions.setCurrentChat(currentRoom.chatID));
+      dispatch(getMessages(currentRoom.chatId));
+      dispatch(roomActions.setCurrentChat(currentRoom.chatId));
       dispatch(chatActions.reset());
     }
   }, [currentRoom, dispatch, currentUserID]);
@@ -35,10 +35,11 @@ export function RoomItem() {
     if (currentChat) {
       socket.emit('joinRoom', {
         id: currentUserID,
-        chatID: currentChat,
+        chatId: currentChat,
         name: name,
       });
     }
+    console.log('joinRoom socket event');
   }, [currentChat, currentUserID, name]);
 
   if (!currentRoom) return <Spinner tip='Searching for room...' />;
