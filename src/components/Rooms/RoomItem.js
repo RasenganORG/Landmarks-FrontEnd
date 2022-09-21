@@ -10,7 +10,7 @@ import { drawerActions } from './Drawers/drawerSlice';
 import { useEffect, useContext, useState } from 'react';
 import { chatActions, getMessages } from '../Chat/chatSlice';
 import { WebSocketContext } from '../SocketIO/socket';
-import { roomActions } from './roomSlice';
+import { getRoomsForUser, roomActions } from './roomSlice';
 
 export function RoomItem() {
   const { roomID } = useParams();
@@ -40,18 +40,26 @@ export function RoomItem() {
         chatId: currentChat,
         name: name,
       });
-      console.log('joinRoom socket event');
       const getUserRoomsHandler = ({ chatId, users }) => {
         console.log('getUserRooms');
         // console.log('chatId', chatId);
-        // const currentChatUsers = users.map((user) => user.id);
-        // const currentRoomMembers = currentRoom.members.map(
-        //   (member) => member.id
-        // );
-        // console.log('currentChatUsers', currentChatUsers);
-        // console.log('currentRoomMembers', currentRoomMembers);
-        // console.log('currentRoom', currentRoom);
-        // dispatch(roomActions.setOnlineUsers({ room: roomID, currentChatUsers }));
+        const currentChatUsers = [...new Set(users.map((user) => user.id))];
+        const currentRoomMembers = [
+          ...new Set(currentRoom.members.map((member) => member.id)),
+        ];
+        console.log('currentChatUsers', currentChatUsers);
+        dispatch(
+          roomActions.setOnlineUsers({ room: roomID, currentChatUsers })
+        );
+        console.log('currentRoomMembers', currentRoomMembers);
+        const found = currentRoomMembers.every((el) =>
+          currentChatUsers.includes(el)
+        );
+        console.log(found);
+        if (!found) {
+          dispatch(getRoomsForUser(currentUserID));
+          dispatch(roomActions.resetActions('getRoom'));
+        }
       };
       socket.on('getUserRooms', getUserRoomsHandler);
       return () => {
@@ -63,7 +71,6 @@ export function RoomItem() {
 
   useEffect(() => {
     const getOtherUsersMessagesHandler = (message) => {
-      console.log('getMessage from other users', message);
       setNewMessage(message);
     };
     socket.on('getMessage', getOtherUsersMessagesHandler);
@@ -119,8 +126,6 @@ export function RoomItem() {
   ];
 
   const handleMenuItemClick = ({ key }) => {
-    // console.log('key', key);
-    // console.log('last drawer opened', currentDrawer);
     if (key === currentDrawer) {
       dispatch(drawerActions.closeDrawer());
       return;

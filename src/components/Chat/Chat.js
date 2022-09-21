@@ -31,7 +31,6 @@ export default function Chat({ chatId, currentUserID, members }) {
     };
 
     socket.off('sendMessage').emit('sendMessage', message);
-    console.log('send message to socket', message);
     dispatch(addMessage({ message, chatId }));
     form.resetFields();
   };
