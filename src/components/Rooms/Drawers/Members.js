@@ -10,21 +10,22 @@ export default function Members({ members, ownerID, currentUserID, chatId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(onlineUsers);
-    setOnline(
-      members.filter((el) => {
-        return onlineUsers.some((foo) => foo.id === el.id);
-      })
+    console.log('onlineUsers', onlineUsers);
+    console.log('members', members);
+    const online = members.filter(
+      (member) =>
+        member.id === onlineUsers.find((id) => id === member.id) && member
     );
-    setOffline(
-      members.filter((el) => {
-        return onlineUsers.every((foo) => foo.id !== el.id);
-      })
+    const offline = members.filter(
+      (member) =>
+        member.id !== onlineUsers.find((id) => id === member.id) && member
     );
-  }, [onlineUsers, members, chatId]);
+    console.log('online', online);
+    console.log('offline', offline);
 
-  // console.log('online', online);
-  // console.log('offline', offline);
+    setOnline(online);
+    setOffline(offline);
+  }, [onlineUsers, members, chatId]);
 
   return (
     <>

@@ -16,11 +16,6 @@ export default function WebSocketProvider({ children }) {
 
   if (!socket) {
     socket = openSocket(ENDPOINT, { transports: ['websocket'] });
-    console.log('De cate ori');
-
-    // socket.on('eventname', (data) => {
-    //   console.log(data);
-    // });
 
     ws = {
       socket: socket,

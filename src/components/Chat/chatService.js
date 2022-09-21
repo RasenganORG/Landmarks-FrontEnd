@@ -5,7 +5,6 @@ const API_ADD_MESSAGE = 'http://localhost:8080/api/chat/addMessage';
 
 // Add message in DB
 const addMessage = async (data) => {
-  // console.log(data);
   const res = await axios.post(API_ADD_MESSAGE, data, {
     headers: {
       'Content-Type': 'application/json',

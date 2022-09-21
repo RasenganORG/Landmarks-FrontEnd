@@ -97,8 +97,8 @@ const roomSlice = createSlice({
       state.message = '';
     },
     setOnlineUsers(state, action) {
-      console.log(action.payload);
-      state.onlineUsers = [...action.payload];
+      // console.log(action.payload);
+      state.onlineUsers = [...action.payload.currentChatUsers];
     },
     setCurrentChat(state, action) {
       state.currentChat = action.payload;
