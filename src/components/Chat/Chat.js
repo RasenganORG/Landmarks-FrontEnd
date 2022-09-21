@@ -2,38 +2,24 @@ import { SendOutlined } from '@ant-design/icons';
 import { Avatar, Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import classes from './Chat.module.css';
-import { addMessage, chatActions } from './chatSlice';
+import { addMessage } from './chatSlice';
 import Spinner from '../Home/Spinner';
 import AvatarIcon from '../../helpers/AvatarIcon';
-import { useRef } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import socket from '../SocketIO/socket';
+import { useRef, useEffect, useContext } from 'react';
+import { WebSocketContext } from '../SocketIO/socket';
 
 export default function Chat({ chatId, currentUserID, members }) {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.chat);
   const [form] = Form.useForm();
   const scrollRef = useRef();
-  const [newMessage, setNewMessage] = useState(null);
+  const { socket } = useContext(WebSocketContext);
 
   useEffect(() => {
-    socket.on('getMessage', (message) => {
-      console.log('getMessage from other users', message);
-      setNewMessage(message);
-    });
-  }, [chatId]);
-
-  useEffect(() => {
-    console.log('chatId', chatId);
-    newMessage &&
-      newMessage.chatId === chatId &&
-      dispatch(chatActions.addMessage(newMessage)) &&
-      console.log('newMessage', newMessage);
-  }, [newMessage, dispatch]);
-
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const scrollToLastMessage = () => {
+      scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+    scrollToLastMessage();
   }, [messages]);
 
   const onSend = (values) => {
@@ -44,10 +30,15 @@ export default function Chat({ chatId, currentUserID, members }) {
       chatId,
     };
 
-    socket.emit('sendMessage', message);
+    socket.off('sendMessage').emit('sendMessage', message);
     console.log('send message to socket', message);
     dispatch(addMessage({ message, chatId }));
     form.resetFields();
+  };
+
+  const getUserAvatar = (message) => {
+    const avt = members.find((user) => user.id === message.sentBy)?.avatar;
+    return avt;
   };
 
   if (!messages) return <Spinner tip='Fetching messages...' />;
@@ -60,7 +51,6 @@ export default function Chat({ chatId, currentUserID, members }) {
           .map((message, index) => (
             <div
               key={index}
-              ref={scrollRef}
               className={`${classes['message-wrapper']} ${
                 message.sentBy === currentUserID
                   ? classes['right']
@@ -71,14 +61,7 @@ export default function Chat({ chatId, currentUserID, members }) {
                 <div className='avatar'>
                   <Avatar
                     size='large'
-                    // icon={
-                    //   <AvatarIcon
-                    //     svg64={
-                    //       members.find((user) => user.id === message.sentBy)
-                    //         ?.avatar
-                    //     }
-                    //   />
-                    // }
+                    icon={<AvatarIcon svg64={getUserAvatar(message)} />}
                   />
                 </div>
                 <div className={classes['message-text']}>
@@ -94,6 +77,7 @@ export default function Chat({ chatId, currentUserID, members }) {
             </div>
           ))
           .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))}
+        <div ref={scrollRef}></div>
       </div>
       <Form
         className={classes['chat-form']}

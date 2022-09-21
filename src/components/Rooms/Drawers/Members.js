@@ -1,9 +1,6 @@
 import { List } from 'antd';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import socket from '../../SocketIO/socket';
-import { roomActions } from '../roomSlice';
 import classes from './Members.module.css';
 
 export default function Members({ members, ownerID, currentUserID, chatId }) {
@@ -11,11 +8,6 @@ export default function Members({ members, ownerID, currentUserID, chatId }) {
   const [online, setOnline] = useState([]);
   const [offline, setOffline] = useState([]);
   const dispatch = useDispatch();
-
-  socket.on('getUserRooms', ({ room: roomID, users }) => {
-    dispatch(roomActions.setOnlineUsers({ room: roomID, users }));
-    console.log('here');
-  });
 
   useEffect(() => {
     console.log(onlineUsers);

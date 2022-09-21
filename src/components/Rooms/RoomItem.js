@@ -7,14 +7,16 @@ import DrawerUI from './Drawers/DrawerUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { drawerActions } from './Drawers/drawerSlice';
-import { useEffect } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { chatActions, getMessages } from '../Chat/chatSlice';
-import socket from '../SocketIO/socket';
+import { WebSocketContext } from '../SocketIO/socket';
 import { roomActions } from './roomSlice';
 
 export function RoomItem() {
   const { roomID } = useParams();
   const dispatch = useDispatch();
+  const { socket } = useContext(WebSocketContext);
+  const [newMessage, setNewMessage] = useState(null);
 
   const currentRoom = useSelector((state) =>
     state.room.rooms?.find((room) => room.id === roomID)
@@ -38,9 +40,44 @@ export function RoomItem() {
         chatId: currentChat,
         name: name,
       });
+      console.log('joinRoom socket event');
+      const getUserRoomsHandler = ({ chatId, users }) => {
+        console.log('getUserRooms');
+        // console.log('chatId', chatId);
+        // const currentChatUsers = users.map((user) => user.id);
+        // const currentRoomMembers = currentRoom.members.map(
+        //   (member) => member.id
+        // );
+        // console.log('currentChatUsers', currentChatUsers);
+        // console.log('currentRoomMembers', currentRoomMembers);
+        // console.log('currentRoom', currentRoom);
+        // dispatch(roomActions.setOnlineUsers({ room: roomID, currentChatUsers }));
+      };
+      socket.on('getUserRooms', getUserRoomsHandler);
+      return () => {
+        socket.removeListener('joinRoom');
+        socket.removeListener('getUserRooms');
+      };
     }
-    console.log('joinRoom socket event');
-  }, [currentChat, currentUserID, name]);
+  }, [currentChat, socket]);
+
+  useEffect(() => {
+    const getOtherUsersMessagesHandler = (message) => {
+      console.log('getMessage from other users', message);
+      setNewMessage(message);
+    };
+    socket.on('getMessage', getOtherUsersMessagesHandler);
+    return () => {
+      socket.removeListener('getMessage');
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    newMessage &&
+      newMessage.chatId === currentChat &&
+      dispatch(chatActions.addMessage(newMessage)) &&
+      console.log('newMessage', newMessage);
+  }, [newMessage, dispatch]);
 
   if (!currentRoom) return <Spinner tip='Searching for room...' />;
 
