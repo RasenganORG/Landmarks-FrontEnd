@@ -1,9 +1,99 @@
-import { useOutlet } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-export default function Home() {
-  const outlet = useOutlet();
+import classes from './Home.module.css';
+import ModalUI from './ModalUI';
+import Spinner from './Spinner';
+import MenuUI from './MenuUI';
+import { roomActions, getRoomsForUser } from '../Rooms/roomSlice';
+import AvatarIcon from '../../helpers/AvatarIcon';
 
-  if (outlet) return <>{outlet}</>;
+import { Layout, Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
-  return <div>Lading page with information about how to use the app</div>;
-}
+const { Content, Sider } = Layout;
+
+const Home = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const [avatarClicked, setAvatarClicked] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user);
+  const {
+    rooms,
+    getRoom: { isLoading },
+  } = useSelector((state) => state.room);
+
+  // Run only once
+  // Fetch rooms from DB on application start or refresh
+  useEffect(() => {
+    dispatch(getRoomsForUser(user.id));
+    dispatch(roomActions.resetActions('getRoom'));
+  }, [dispatch, user]);
+
+  const handleAvatarClick = () => {
+    setAvatarClicked(true);
+    navigate(`/profile/${user.name}`, { state: user.id });
+  };
+
+  return (
+    <>
+      <Layout
+        style={{
+          minHeight: '100vh',
+        }}
+      >
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
+        >
+          <div className='logo' />
+          <div className={classes.avatar} onClick={handleAvatarClick}>
+            <Avatar
+              icon={
+                user.avatar ? (
+                  <AvatarIcon svg64={user.avatar} />
+                ) : (
+                  <UserOutlined />
+                )
+              }
+              size={{ xs: 24, sm: 32, md: 40, lg: 50, xl: 70, xxl: 80 }}
+              alt='ProfileAvatar'
+            />
+          </div>
+          <MenuUI
+            classes={classes}
+            rooms={rooms}
+            loading={isLoading}
+            avatarClicked={avatarClicked}
+            setAvatarClicked={setAvatarClicked}
+          />
+        </Sider>
+        <Layout className='site-layout'>
+          <Content>
+            <div
+              className={classes['layout-content']}
+              style={{
+                height: '100%',
+                width: '100%',
+              }}
+            >
+              {isLoading ? (
+                <Spinner tip='Starting your next adventure...' />
+              ) : (
+                <Outlet />
+              )}
+            </div>
+          </Content>
+        </Layout>
+      </Layout>
+      <ModalUI></ModalUI>
+    </>
+  );
+};
+
+export default Home;

@@ -1,8 +1,8 @@
 import 'antd/dist/antd.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LayoutPage from './components/LayoutPage/LayoutPage';
 
 import Home from './components/Home/Home';
+import LandingPage from './components/LandingPage/LandingPage';
 import { RoomItem, CreateRoom, EditRoom } from './components/Rooms';
 import Profile from './components/Profile/Profile';
 import Login from './components/Authenticate/Login';
@@ -20,16 +20,16 @@ function App() {
           path='/'
           element={
             <PrivateRoute>
-              <LayoutPage />
+              <Home />
             </PrivateRoute>
           }
         >
-          <Route index element={<Home />} />
-          <Route path='rooms' element={<Home />}>
+          <Route index element={<LandingPage />} />
+          <Route path='rooms' element={<LandingPage />}>
             <Route path='new' element={<CreateRoom />} />
             <Route path=':roomID' element={<RoomItem />} />
             <Route path=':roomID/edit' element={<EditRoom />} />
-            <Route path=':inviteToken/join' element={<JoinRoom />} />
+            <Route path='join/:inviteToken/' element={<JoinRoom />} />
           </Route>
           <Route path='profile/:id' element={<Profile />} />
         </Route>

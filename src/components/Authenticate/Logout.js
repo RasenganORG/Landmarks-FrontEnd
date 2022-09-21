@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { modalActions } from '../LayoutPage/modalSlice';
+import { modalActions } from '../Home/modalSlice';
 import { logout, userActions } from './userSlice';
 
 import { Button, Form } from 'antd';

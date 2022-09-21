@@ -7,7 +7,7 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Row, Col } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import Spinner from '../LayoutPage/Spinner';
+import Spinner from '../Home/Spinner';
 
 export default function Login() {
   const dispatch = useDispatch();

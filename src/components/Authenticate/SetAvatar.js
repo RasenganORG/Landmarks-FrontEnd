@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import Icon from '@ant-design/icons';
 import { Button } from 'antd';
-import SVG from 'react-inlinesvg';
-import Spinner from '../LayoutPage/Spinner';
+import Spinner from '../Home/Spinner';
 import { Buffer } from 'buffer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { successToast, errorToast } from '../../helpers/messageToast';
 import { userActions, register } from './userSlice';
 import classes from './SetAvatar.module.css';
+import AvatarIcon from '../../helpers/AvatarIcon';
 
 export default function SetAvatar() {
   const navigate = useNavigate();
@@ -30,7 +29,6 @@ export default function SetAvatar() {
     const getAvatar = async () => {
       setIsLoading(true);
       const data = [];
-      const avatar = {};
       for (let i = 0; i < 5; i++) {
         const res = await fetch(
           `https://api.multiavatar.com/${Math.round(
@@ -40,20 +38,15 @@ export default function SetAvatar() {
         // Get SVG image from Multiavatar API
         const svg = await res.text();
         // Encode it in base64 to be later saved in database
-        const encoded64 = Buffer.from(svg).toString('base64');
-        // Create new icon for ANTD Icon component
-        const newSVG = () => <SVG src={svg} />;
-        const newIcon = (props) => <Icon component={newSVG} {...props} />;
-
-        avatar[`avatar${i}`] = { svg64: encoded64, icon: newIcon };
+        const svg64 = Buffer.from(svg).toString('base64');
         // Push object {svg64, icon}
-        data.push(avatar[`avatar${i}`]);
+        data.push(svg64);
       }
       setAvatars(data);
       setIsLoading(false);
     };
     getAvatar();
-  }, [setAvatars]);
+  }, [setAvatars, setIsLoading]);
 
   useEffect(() => {
     if (isError) {
@@ -72,7 +65,7 @@ export default function SetAvatar() {
 
   const submitRegisterForm = () => {
     const user = { ...state };
-    user.avatar = avatars[selectedAvatar].svg64;
+    user.avatar = avatars[selectedAvatar];
     dispatch(register(user));
   };
 
@@ -86,14 +79,13 @@ export default function SetAvatar() {
             <h1>Pick an Avatar for your profile</h1>
           </div>
           <div style={{ margin: 20 }}>
-            {avatars.map((image, index) => {
-              const Avatar = image.icon;
+            {avatars.map((svg64, index) => {
               return (
                 <Button
                   onClick={() => setSelectedAvatar(index)}
                   type='primary'
                   shape='circle'
-                  icon={<Avatar />}
+                  icon={<AvatarIcon svg64={svg64} />}
                   key={index}
                   className={classes['avatars']}
                   style={{

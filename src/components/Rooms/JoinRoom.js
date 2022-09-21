@@ -6,7 +6,7 @@ import {
   addUserToRoomMembership,
   getRoomsForUser,
 } from './roomSlice';
-import Spinner from '../LayoutPage/Spinner';
+import Spinner from '../Home/Spinner';
 import { errorToast } from '../../helpers/messageToast';
 
 export default function JoinRoom() {

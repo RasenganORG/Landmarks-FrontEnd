@@ -1,21 +1,23 @@
 import axios from 'axios';
 
-const API_ROOM = 'http://localhost:8080/api/room/';
+const API_ROOMS = 'http://localhost:8080/api/rooms/';
+const API_CREATE_ROOM = 'http://localhost:8080/api/rooms/createRoom/';
+const API_INVITE_TO_ROOM = 'http://localhost:8080/api/rooms/invite/';
 
 // Create 'room' in DB
 const createRoom = async (data) => {
-  await axios.post(API_ROOM, data.room, {
+  await axios.post(API_CREATE_ROOM, data.room, {
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  // Returns data{room{}, members[],chat[]}
+  // Returns data{room{}, members[]}
   return data;
 };
 
 // Create 'room' in DB
 const getRoomsForUser = async (userID) => {
-  const res = await axios.get(`http://localhost:8080/api/${userID}/rooms/`);
+  const res = await axios.get(`${API_ROOMS}${userID}/rooms/`);
   // Returns roomsArray
   return res.data;
 };
@@ -23,7 +25,7 @@ const getRoomsForUser = async (userID) => {
 // update 'room' in DB
 const addUserToRoomMembership = async ({ roomToken, userID }) => {
   const response = await axios.put(
-    `${API_ROOM}${roomToken}`,
+    `${API_INVITE_TO_ROOM}${roomToken}`,
     { userID },
     {
       headers: {
