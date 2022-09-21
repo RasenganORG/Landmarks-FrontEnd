@@ -11,6 +11,8 @@ import { useEffect, useContext, useState } from 'react';
 import { chatActions, getMessages } from '../Chat/chatSlice';
 import { WebSocketContext } from '../SocketIO/socket';
 import { getRoomsForUser, roomActions } from './roomSlice';
+import { modalActions } from '../Home/modalSlice';
+import MapUI from '../Map/MapUI';
 
 export function RoomItem() {
   const { roomID } = useParams();
@@ -140,6 +142,14 @@ export function RoomItem() {
       dispatch(drawerActions.changeDrawer(key));
       dispatch(drawerActions.openDrawer());
     }
+    if (key === 'Landmark') {
+      dispatch(modalActions.openModal('Landmarks'));
+      dispatch(drawerActions.closeDrawer());
+    }
+    if (key === 'Event') {
+      dispatch(modalActions.openModal('Events'));
+      dispatch(drawerActions.closeDrawer());
+    }
 
     if (key === 'Invite') {
       navigator.clipboard.writeText(
@@ -176,7 +186,7 @@ export function RoomItem() {
         </Col>
       </Row>
       <Content>
-        <div className={classes['map-container']}></div>
+        <MapUI />
       </Content>
       <DrawerUI room={currentRoom} currentUserID={currentUserID} />
     </Layout>
