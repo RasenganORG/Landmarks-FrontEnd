@@ -3,6 +3,8 @@ import { modalActions } from './modalSlice';
 
 import { Modal } from 'antd';
 import Logout from '../Authenticate/Logout';
+import AddEvent from '../AddEvent/AddEvent';
+import AddLandmark from '../AddLandmark/AddLandmark';
 
 export default function ModalUI() {
   const dispatch = useDispatch();
@@ -18,6 +20,14 @@ export default function ModalUI() {
   if (whichModal === 'Logout') {
     whichForm = <Logout />;
     title = 'Are you sure you want to log out ?';
+  }
+  if (whichModal === 'Events') {
+    whichForm = <AddEvent />;
+    title = 'Add an event:';
+  }
+  if (whichModal === 'Landmarks') {
+    whichForm = <AddLandmark />;
+    title = 'Add a landmark:';
   }
 
   return (
